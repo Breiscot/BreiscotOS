@@ -30,6 +30,7 @@
             --glass-blur: blur(15px);
         }
 
+        <!-- Schermata di Blocco-->
         #lockscreen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,6 +78,155 @@
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
+
+        .login-input {
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: white;
+            outline: none;
+            backdrop-filter: blur(5px);
+        }
+        .login-input::placeholder { color: rgba(255,255,255,0.7); }
+
+        <!-- DESKTOP-->
+        #topbar {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .topbar-left i { margin-right: 15px; }
+
+        <!-- DOCK-->
+        #dock {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            padding: 10px;
+            border-radius: 20px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .dock-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .dock-icon:hover {
+            transform: scale(1.2) translateY(-10px);
+        }
+
+        .icon-folder { background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%); color: white; }
+        .icon-music { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+
+        .window {
+            position: absolute;
+            top: 20%; left: 30%;
+            width: 600px;
+            height: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .window-header {
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            cursor: grab;
+        }
+
+        .window-header:active { cursor: grabbing; }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            width: 12px; height: 12px; border-radius: 50%; cursor: pointer;
+        }
+        .btn-close { background: #ff5f56; }
+        .btn-min { background: #ffbd2e; }
+        .btn-max { background: #27c93f;}
+
+        .window-title {
+            flex-grow: 1;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-right: 44px;
+        }
+
+        .window-content {
+            flex-grow: 1;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .music-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .album-art {
+            width: 150px; height: 150px;
+            background: url(images/let_down_music.png) center/cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        .music-controls {
+            display: flex; gap: 20px; font-size: 1.5rem; cursor: pointer;
+        }
+
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 20px;
+        }
+        .file-item {
+            display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; font-size: 0.8rem; gap: 5px;
+        }
+        .file-item i { font-size: 2.5rem; color: #74ebd5; }
         
     </style>
 </head>
