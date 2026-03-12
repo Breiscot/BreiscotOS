@@ -230,5 +230,48 @@
         
     </style>
 </head>
+<body>
+    <div id="lockscreen">
+        <div class="clock-large" id="lock-clock">12:00</div>
+        <div class="login-box">
+            <div class="avatar"></div>
+            <h3 style="color: white; margin-bottom: 10px; font-weight: 400;">Breiscot</h3>
+            <input type="password" class="login-input" placeholder="Premi Invio per sbloccare..." id="password-input">
+        </div>
+    </div>
+
+    <div id="desktop">
+        <div id="topbar">
+            <div class="topbar-left">
+                <i class="fa-brands fa-linux"></i>
+                <span id="active-app-name">BreiscotOS</span>
+            </div>
+            <div class="topbar-right">
+                <i class="fa-solid fa-wifi" style="margin-right: 15px;"></i>
+                <i class="fa-solid fa-battery-full" style="margin-right: 15px;"></i>
+                <span id="top-clock">12:00</span>
+            </div>
+        </div>
+
+        <div class="window" id="window-folder">
+            <div class="window-header" id="window-folder-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-folder')"></div>
+                    <div class="control-btn btn-min"></div>
+                    <div class="control-btn btn-max"></div>
+                </div>
+                <div class="window-title">Documenti</div>
+            </div>
+            <div class="window-content">
+                <div class="folder-grid">
+                    <div class="file-item"><i class="fa-solid fa-file-lines"></i><span>Appunti.txt</span></div>
+                    <div class="file-item"><i class="fa-solid fa-image"></i><span>Foto.jpg</span></div>
+                    <div class="file-item"><i class="fa-solid fa-folder"></i><span>Progetti</span></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
 
 </html>
