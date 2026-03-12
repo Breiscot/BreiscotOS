@@ -20,13 +20,14 @@
     <div id="desktop">
         <div id="topbar">
             <div class="topbar-left">
-                <i class="fa-brands fa-linux"></i>
-                <span id="active-app-name">BreiscotOS</span>
+                <i class="fa-brands fa-linux" style="font-size: 1.1rem;"></i>
+                <span id="active-app-name" style="font-weight: 600;">BreiscotOS</span>
             </div>
+
             <div class="topbar-right">
-                <i class="fa-solid fa-wifi" style="margin-right: 15px;"></i>
-                <i class="fa-solid fa-battery-full" style="margin-right: 15px;"></i>
-                <span id="top-clock">12:00</span>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+                <span id="top-clock" style="margin-left: 5px;">12:00</span>
             </div>
         </div>
 
@@ -34,16 +35,16 @@
             <div class="window-header" id="window-folder-header">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-folder')"></div>
-                    <div class="control-btn btn-min"></div>
-                    <div class="control-btn btn-max"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-folder')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-folder')"></div>
                 </div>
-                <div class="window-title">Documenti</div>
+                <div class="window-title">Documents</div>
             </div>
             <div class="window-content">
                 <div class="folder-grid">
                     <div class="file-item"><i class="fa-solid fa-file-lines"></i><span>Appunti.txt</span></div>
-                    <div class="file-item"><i class="fa-solid fa-image"></i><span>Foto.jpg</span></div>
-                    <div class="file-item"><i class="fa-solid fa-folder"></i><span>Progetti</span></div>
+                    <div class="file-item"><i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Foto.jpg</span></div>
+                    <div class="file-item"><i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Progetti</span></div>
                 </div>
             </div>
         </div>
@@ -52,19 +53,19 @@
             <div class="window-header" id="window-music-header">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-music')"></div>
-                    <div class="control-btn btn-min"></div>
-                    <div class="control-btn btn-max"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-music')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-music')"></div>
                 </div>
                 <div class="window-title">Music Player</div>
             </div>
             <div class="window-content">
                 <div class="music-player">
                     <div class="album-art"></div>
-                    <h2 style="margin-bottom: 5px;">Let Down</h2>
-                    <p style="color: #ccc; margin-bottom: 20px;">RadioHead</p>
+                    <h2 style="margin-bottom: 5px; font-weight: 600;">Let Down</h2>
+                    <p style="color: #aaa; margin-bottom: 30px;">RadioHead</p>
                     <div class="music-controls">
                         <i class="fa-solid fa-backward-step"></i>
-                        <i class="fa-solid fa-circle-play"></i>
+                        <i class="fa-solid fa-circle-play" id="play-btn" onclick="togglePlay()"></i>
                         <i class="fa-solid fa-forward-step"></i>
                     </div>
                 </div>
@@ -72,7 +73,7 @@
         </div>
 
         <div id="dock">
-            <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Finder')">
+            <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Folder')">
                 <i class="fa-solid fa-folder"></i>
             </div>
             <div class="dock-icon icon-music" onclick="openWindow('window-music', 'Music')">
@@ -107,12 +108,39 @@
             const win = document.getElementById(id);
             win.style.display = 'flex';
             win.style.zIndex = ++zIndexCounter;
-            document.getElementById('active-app-name').innerText = 'appName';
+            document.getElementById('active-app-name').innerText = appName;
         }
 
         function closeWindow(id) {
             document.getElementById(id).style.display = 'none';
             document.getElementById('active-app-name').innerText = 'BreiscotOS';
+        }
+
+        function minimizeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function maximizeWindow(id) {
+            const win = document.getElementById(id);
+
+            if (!win.dataset.maximized || win.dataset.maximized === "false") {
+                win.dataset.origTop = win.style.top || win.offsetTop + "px";
+                win.dataset.origLeft = win.style.left || win.offsetLeft + "px";
+                win.dataset.origWidth = win.style.width || win.offsetWidth + "px";
+                win.dataset.origHeight = win.style.height || win.offsetHeight + "px";
+
+                win.style.top = "32px";
+                win.style.left = "0px";
+                win.style.width = "100vw";
+                win.style.height = "calc(100vh - 32px)";
+                win.dataset.maximized = "true";
+            } else {
+                win.style.top = win.dataset.origTop;
+                win.style.left = win.dataset.origLeft;
+                win.style.width = win.dataset.origWidth;
+                win.style.height = win.dataset.origHeight;
+                win.dataset.maximized = "false";
+            }
         }
 
         const windows = document.querySelectorAll('_window');
@@ -127,6 +155,9 @@
             headerElement.onmousedown = dragMouseDown;
 
             function dragMouseDown(e) {
+
+                if(windowElement.dataset.maximized === "true") return;
+
                 e.preventDefault();
                 pos3 = e.clientX;
                 pos4 = e.clientY;
