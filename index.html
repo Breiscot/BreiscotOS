@@ -53,12 +53,118 @@
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-music')"></div>
                     <div class="control-btn btn-min"></div>
-                    <div class=""></div>
+                    <div class="control-btn btn-max"></div>
+                </div>
+                <div class="window-title">Music Player</div>
+            </div>
+            <div class="window-content">
+                <div class="music-player">
+                    <div class="album-art"></div>
+                    <h2 style="margin-bottom: 5px;">Let Down</h2>
+                    <p style="color: #ccc; margin-bottom: 20px;">RadioHead</p>
+                    <div class="music-controls">
+                        <i class="fa-solid fa-backward-step"></i>
+                        <i class="fa-solid fa-circle-play"></i>
+                        <i class="fa-solid fa-forward-step"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div id="dock">
+            <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Finder')">
+                <i class="fa-solid fa-folder"></i>
+            </div>
+            <div class="dock-icon icon-music" onclick="openWindow('window-music', 'Music')">
+                <i class="fa-solid fa-music"></i>
+            </div>
+        </div>
     </div>
-</body>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('lock-clock').innerText = timeString;
+            document.getElementById('top-clock').innerText = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
+        const passwordInput = document.getElementById('password-input');
+        const lockscreen = document.getElementById('lockscreen');
+
+        passwordInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                lockscreen.classList.add('unlocked');
+                setTimeout(() => lockscreen.style.display = 'none', 800);
+            }
+            
+        });
+
+        let zIndexCounter = 10;
+
+        function openWindow(id, appName) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            win.style.zIndex = ++zIndexCounter;
+            document.getElementById('active-app-name').innerText = 'appName';
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+            document.getElementById('active-app-name').innerText = 'BreiscotOS';
+        }
+
+        const windows = document.querySelectorAll('_window');
+        windows.forEach(win => {
+            win.addEventListener('mousedown', () => {
+                win.style.zIndex = ++zIndexCounter;
+            });
+        });
+
+        function makeDraggable(windowElement, headerElement) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            headerElement.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                windowElement.style.top = (windowElement.offsetTop - pos2) + "px";
+                windowElement.style.left = (windowElement.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        makeDraggable(document.getElementById('window-folder'), document.getElementById('window-folder-header'));
+        makeDraggable(document.getElementById('window-music'), document.getElementById('window-music-header'));
+
+        let isPlaying = false;
+        function togglePlay() {
+            const playBtn = document.getElementById('play-btn');
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playBtn.classList.remove('fa-circle-play');
+                playBtn.classList.add('fa-circle-pause');
+            } else {
+                playBtn.classList.remove('fa-circle-pause');
+                playBtn.classList.add('fa-circle-play');
+            }
+        }
+    </script>
+</body>
 </html>

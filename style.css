@@ -12,7 +12,7 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background-image: url('images/background1.png') no-repeat center center fixed;
+            background-image: url('images/background1.png');
             background-size: cover;
         }
 
@@ -65,7 +65,7 @@
         .avatar {
             width: 100px; height: 100px;
             border-radius: 50%;
-            background-image: url('images/ceiling_avatar.jpg') no-repeat center;
+            background-image: url('images/ceiling_avatar.jpg');
             background-color: white;
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
