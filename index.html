@@ -93,13 +93,14 @@
 
         const passwordInput = document.getElementById('password-input');
         const lockscreen = document.getElementById('lockscreen');
+        const desktop = document.getElementById('desktop');
 
         passwordInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 lockscreen.classList.add('unlocked');
+                desktop.classList.add('active');
                 setTimeout(() => lockscreen.style.display = 'none', 800);
             }
-            
         });
 
         let zIndexCounter = 10;
