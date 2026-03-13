@@ -92,7 +92,32 @@
                 <div class="settings-content">
                     <h3>Wallpaper of Desktop</h3>
                     <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Choose a new Wallpaper for your Desktop</p>
-                    <div class="bg-options"></div>
+                    <div class="bg-options">
+                        <div class="bg-preview" style="background-image: url(images/background1.png);" onclick="changeBackground('images/background1.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/milkyway_bg.png);" onclick="changeBackground('images/milkyway_bg.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/ceiling_avatar.png);" onclick="changeBackground('images/ceiling_avatar.png')"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window terminal-window" id="window-terminal">
+            <div class="window-header" id="window-terminal-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-terminal')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-terminal')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-terminal')"></div>
+                </div>
+                <div class="window-title">Terminal</div>
+            </div>
+            <div class="terminal-content" id="terminal-content" onclick="document.getElementById('terminal-input').focus()">
+                <div id="terminal-output">
+                    <div>Welcome to BreiscotOS Terminal v1.0.0</div>
+                    <div>Type any commands available.</div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="prompt">breiscot@os:~$</span>
+                    <input type="text" id="term-input" autocomplete="off" spellcheck="false" onkeydown="handleTerminalCommand(event)">
                 </div>
             </div>
         </div>
@@ -101,8 +126,14 @@
             <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Folder')">
                 <i class="fa-solid fa-folder"></i>
             </div>
+            <div class="dock-icon icon-terminal" onclick="openWindow('window-terminal', 'Terminal')" style="background: #333; color: #4af626;">
+                <i class="fa-solid fa-terminal"></i>
+            </div>
             <div class="dock-icon icon-music" onclick="openWindow('window-music', 'Music')">
                 <i class="fa-solid fa-music"></i>
+            </div>
+            <div class="dock-icon icon-settings" onclick="openWindow('window-settings', 'Settings')" style="background: #8e8e93; color: white;">
+                <i class="fa-solid fa-gear"></i>
             </div>
         </div>
     </div>
