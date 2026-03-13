@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <audio id="my-audio" src="https://open.spotify.com/track/2fuYa3Lx06QQJAm0MjztKr?si=17c3e8c72bd94793"></audio>
+
     <div id="lockscreen">
         <div class="clock-large" id="lock-clock">12:00</div>
         <div class="login-box">
@@ -42,9 +44,9 @@
             </div>
             <div class="window-content">
                 <div class="folder-grid">
-                    <div class="file-item"><i class="fa-solid fa-file-lines"></i><span>Appunti.txt</span></div>
-                    <div class="file-item"><i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Foto.jpg</span></div>
-                    <div class="file-item"><i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Progetti</span></div>
+                    <div class="file-item"><i class="fa-solid fa-file-lines"></i><span>README.txt</span></div>
+                    <div class="file-item"><i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Image.jpg</span></div>
+                    <div class="file-item"><i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Projects</span></div>
                 </div>
             </div>
         </div>
@@ -68,6 +70,29 @@
                         <i class="fa-solid fa-circle-play" id="play-btn" onclick="togglePlay()"></i>
                         <i class="fa-solid fa-forward-step"></i>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="window-settings">
+            <div class="window-header" id="window-settings-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-settings')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-settings')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-settings')"></div>
+                </div>
+                <div class="window-title">Settings</div>
+            </div>
+            <div class="settings-container">
+                <div class="settings-sidebar">
+                    <div class="settings-tab active"><i class="fa-solid fa-desktop"></i> Customization</div>
+                    <div class="settings-tab"><i class="fa-solid fa-wifi"></i> Network</div>
+                    <div class="settings-tab"><i class="fa-solid fa-volume-high"></i> Audio</div>
+                </div>
+                <div class="settings-content">
+                    <h3>Wallpaper of Desktop</h3>
+                    <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Choose a new Wallpaper for your Desktop</p>
+                    <div class="bg-options"></div>
                 </div>
             </div>
         </div>
