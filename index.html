@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <audio id="my-audio" src="https://open.spotify.com/track/2fuYa3Lx06QQJAm0MjztKr?si=17c3e8c72bd94793"></audio>
+    <audio id="my-audio" src="audio/Let Down (Remastered).mp3"></audio>
 
     <div id="lockscreen">
         <div class="clock-large" id="lock-clock">12:00</div>
@@ -137,6 +137,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function updateClock() {
             const now = new Date();
@@ -166,11 +167,16 @@
             win.style.display = 'flex';
             win.style.zIndex = ++zIndexCounter;
             document.getElementById('active-app-name').innerText = appName;
+
+            if(id === 'window-terminal') {
+                setTimeout(() => document.getElementById('term.input').focus(), 100);
+            }
         }
 
         function closeWindow(id) {
             document.getElementById(id).style.display = 'none';
             document.getElementById('active-app-name').innerText = 'BreiscotOS';
+            if(id === 'window-terminal') stopParrot();
         }
 
         function minimizeWindow(id) {
@@ -240,19 +246,73 @@
 
         makeDraggable(document.getElementById('window-folder'), document.getElementById('window-folder-header'));
         makeDraggable(document.getElementById('window-music'), document.getElementById('window-music-header'));
+        makeDraggable(document.getElementById('window-settings'), document.getElementById('window-settings-header'));
+        makeDraggable(document.getElementById('window-terminal'), document.getElementById('window-terminal-header'));
 
+        const audioEl = document.getElementById('my-audio');
         let isPlaying = false;
+
         function togglePlay() {
             const playBtn = document.getElementById('play-btn');
             isPlaying = !isPlaying;
             if (isPlaying) {
+                audioEl.play();
                 playBtn.classList.remove('fa-circle-play');
                 playBtn.classList.add('fa-circle-pause');
             } else {
+                audioEl.pause();
                 playBtn.classList.remove('fa-circle-pause');
                 playBtn.classList.add('fa-circle-play');
             }
         }
+
+        function changeBackground(url) {
+            document.body.style.backgroundImage = 'url("$(url)")';
+        }
+
+        const terminalOutput = document.getElementById('terminal-output');
+        const termInput = document.getElementById('term-input');
+        const terminalContent = document.getElementById('terminal-content');
+        let parrotInterval = null;
+
+        function printToTerminal(htmlString) {
+            const newLine = document.createElement('div');
+            newLine.innerHTML = htmlString;
+            terminalOutput.appendChild(newLine);
+            terminalContent.scrollTop = terminalContent.scrollHeight
+        }
+
+        function stopParrot() {
+            if(parrotInterval) {
+                clearInterval(parrotInterval);
+                parrotInterval = null;
+                printToTerminal('<em>Process terminated.</em>');
+            }
+        }
+
+        function handleTerminalCommand(e) {
+            if (e.key === 'Enter') {
+                const cmd = termInput.value.trim();
+                termInput.value = '';
+
+                if(parrotInterval) {
+                    stopParrot();
+                    return;
+                }
+
+                printToTerminal('<span class="prompt">breiscot@os:~$</span> $(cmd)');
+
+                if (cmd === '') return;
+
+                if (cmd === 'clear') {
+                    terminalOutput.innerHTML = '';
+                }
+                else if (cmd === 'neofetch') {
+                    const neofetchArt = '<pre style="color: #0ff; font-weight: bold; display: flex; gap: 20px;">'
+                }
+            }
+        }
+
     </script>
 </body>
 </html>
