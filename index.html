@@ -300,7 +300,7 @@
                     return;
                 }
 
-                printToTerminal('<span class="prompt">breiscot@os:~$</span> $(cmd)');
+                printToTerminal(`<span class="prompt">breiscot@os:~$</span> $(cmd)`);
 
                 if (cmd === '') return;
 
@@ -308,7 +308,30 @@
                     terminalOutput.innerHTML = '';
                 }
                 else if (cmd === 'neofetch') {
-                    const neofetchArt = '<pre style="color: #0ff; font-weight: bold; display: flex; gap: 20px;">'
+                    const neofetchArt = `
+                    <pre style="display; flex; gap: 20px; line-height: 1.2; margin-top: 10px;">
+                        <div style="color: #f39c12; font-weight: bold; white-space: pre;">
+                            .--.
+                           |o_o |
+                           |:_/ |
+                          //   \\ \\
+                         (|     | )
+                        /'\\_   _/'\\
+                        \\___)=(___/
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <span style"color: #f39c12; font-weight: bold;">breiscot@os</span>
+                            <span>-----------</span>
+                            <span><span style="color: #3498db;">OS:</span> BreiscotOS x86_64</span>
+                            <span><span style="color: #3498db;">Kernel:</span> 1.00.0-html-os</span>
+                            <span><span style="color: #3498db;">Uptime:</span> <span id="uptime-neo">Just started</span>
+                            <span><span style="color: #3498db;">Shell:</span> brei-bash</span>
+                        </div>
+                    </pre>`;
+                    printToTerminal(neofetchArt);
+                }
+                else if (cmd === 'curl parrot.live') {
+                    
                 }
             }
         }
