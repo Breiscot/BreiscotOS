@@ -27,7 +27,9 @@
             </div>
 
             <div class="topbar-right">
-                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-volume-high"></i>
+                <input type="range" id="top-vol" class="vol-slider" min="0" max="100" value="100" oninput="syncVolume(this.value)">
+                <i class="fa-solid fa-wifi" style="margin-left: 10px;"></i>
                 <i class="fa-solid fa-battery-full"></i>
                 <span id="top-clock" style="margin-left: 5px;">12:00</span>
             </div>
@@ -44,11 +46,65 @@
             </div>
             <div class="window-content">
                 <div class="folder-grid">
-                    <div class="file-item"><i class="fa-solid fa-file-lines"></i><span>README.txt</span></div>
-                    <div class="file-item"><i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Image.jpg</span></div>
+                    <div class="file-item" onclick="openWindow('window-notepad', 'NotePad')">
+                        <i class="fa-solid fa-file-lines"></i><span>README.txt</span>
+                    </div>
+                    <div class="file-item" onclick="openWindow('window-photo', 'Image')">
+                        <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Image.jpg</span>
+                    </div>
                     <div class="file-item"><i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Projects</span></div>
                 </div>
             </div>
+        </div>
+
+        <div class="window" id="window-notepad">
+            <div class="window-header" id="window-notepad-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-notepad')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-notepad')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-notepad')"></div>
+                </div>
+                <div class="window-title">README.txt - NotePad</div>
+            </div>
+            <textarea class="notepad-area" spellcheck="false">
+Welcome to BreiscotOS!
+
+In this README I can give you instructions on:
+1. What commands you can use
+2. or other information.
+
+I hope you like this WebOS! Byee!
+            </textarea>
+        </div>
+
+        <div class="window" id="window-photo">
+            <div class="window-header" id="window-photo-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-photo')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-photo')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-photo')"></div>
+                </div>
+                <div class="window-title">Image.jpg</div>
+            </div>
+            <div class="photo-viewer" style="background-image: url('images/ceiling_avatar.png');"></div>
+        </div>
+
+        <div class="window" id="window-browser" style="width: 800px; height: 500px;">
+            <div class="window-header" id="window-browser-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-browser')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-browser')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-browser')"></div>
+                </div>
+                <div class="window-title">Browser Web</div>
+            </div>
+            <div class="browser-bar">
+                <i class="fa-solid fa-arrow-left"></i>
+                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-rotate-right" onclick="document.getElementById('browser-frame').src += ''"></i>
+                <input type="text" id="browser-url" placeholder="Search with DuckDuckGo or enter URL..." onkeydown="handleBrowser(event)">
+            </div>
+            <iframe id="browser-frame" class="browser-frame" src="https://lite.duckduckgo.com/lite/"></iframe>
         </div>
 
         <div class="window" id="window-music">
@@ -85,9 +141,9 @@
             </div>
             <div class="settings-container">
                 <div class="settings-sidebar">
-                    <div class="settings-tab active"><i class="fa-solid fa-desktop"></i> Customization</div>
-                    <div class="settings-tab"><i class="fa-solid fa-wifi"></i> Network</div>
-                    <div class="settings-tab"><i class="fa-solid fa-volume-high"></i> Audio</div>
+                    <div class="settings-tab active" onclick="switchSettings('customization', this)"><i class="fa-solid fa-desktop"></i> Customization</div>
+                    <div class="settings-tab" onclick="switchSettings('network', this)"><i class="fa-solid fa-wifi"></i> Network</div>
+                    <div class="settings-tab" onclick="switchSettings('audio', this)"><i class="fa-solid fa-volume-high"></i> Audio</div>
                 </div>
                 <div class="settings-content">
                     <h3>Wallpaper of Desktop</h3>
@@ -96,6 +152,24 @@
                         <div class="bg-preview" style="background-image: url(images/background1.png);" onclick="changeBackground('images/background1.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/milkyway_bg.png);" onclick="changeBackground('images/milkyway_bg.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/ceiling_avatar.png);" onclick="changeBackground('images/ceiling_avatar.png')"></div>
+                    </div>
+                </div>
+
+                <div id="sec-nete" class="settings-section">
+                    <h3>Settings of Network</h3>
+                    <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Current network: Connected</p>
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                        <i class="fa-solid fa-wifi" style="color: #4af626;"></i> ceiling_Wi-Fi_10G
+                    </div>
+                </div>
+                
+                <div id="sec-audio" class="settings-section">
+                    <h3>Volume of System</h3>
+                    <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Adjust the volume of system</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fa-solid fa-volume-off"></i>
+                        <input type="range" id="set-vol" class="vol-slider" style="width: 200px;" min="0" max="100" value="100" oninput="syncVolume(this.value)">
+                        <i class="fa-solid fa-volume-high"></i>
                     </div>
                 </div>
             </div>
@@ -125,6 +199,9 @@
         <div id="dock">
             <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Folder')">
                 <i class="fa-solid fa-folder"></i>
+            </div>
+            <div class="dock-icon" onclick="openWindow('window-browser, Browser')" style="background: #ff5722; color: white;">
+                <i class="fa-brands fa-firefox-browser"></i>
             </div>
             <div class="dock-icon icon-terminal" onclick="openWindow('window-terminal', 'Terminal')" style="background: #333; color: #4af626;">
                 <i class="fa-solid fa-terminal"></i>
@@ -208,9 +285,7 @@
 
         const windows = document.querySelectorAll('.window');
         windows.forEach(win => {
-            win.addEventListener('mousedown', () => {
-                win.style.zIndex = ++zIndexCounter;
-            });
+            win.addEventListener('mousedown', () => win.style.zIndex = ++zIndexCounter);
         });
 
         function makeDraggable(windowElement, headerElement) {
@@ -244,10 +319,8 @@
             }
         }
 
-        makeDraggable(document.getElementById('window-folder'), document.getElementById('window-folder-header'));
-        makeDraggable(document.getElementById('window-music'), document.getElementById('window-music-header'));
-        makeDraggable(document.getElementById('window-settings'), document.getElementById('window-settings-header'));
-        makeDraggable(document.getElementById('window-terminal'), document.getElementById('window-terminal-header'));
+        const windowIDs = ['window-folder', 'window-music', 'window-settings', 'window-terminal', 'window-notepad', 'window-photo', 'window-browser'];
+        windowIDs.forEach(id => makeDraggable(document.getElementById(id), document.getElementById(id + '-header')));
 
         const audioEl = document.getElementById('my-audio');
         let isPlaying = false;
@@ -267,7 +340,7 @@
         }
 
         function changeBackground(url) {
-            document.body.style.backgroundImage = 'url("$(url)")';
+            document.body.style.backgroundImage = `url('${url}')`;
         }
 
         const terminalOutput = document.getElementById('terminal-output');
@@ -324,7 +397,6 @@
                             <span>-----------</span>
                             <span><span style="color: #3498db;">OS:</span> BreiscotOS x86_64</span>
                             <span><span style="color: #3498db;">Kernel:</span> 1.00.0-html-os</span>
-                            <span><span style="color: #3498db;">Uptime:</span> <span id="uptime-neo">Just started</span>
                             <span><span style="color: #3498db;">Shell:</span> brei-bash</span>
                         </div>
                     </pre>`;
@@ -333,8 +405,8 @@
                 else if (cmd === 'curl parrot.live') {
                     printToTerminal("<em>Connecting to parrot.live... (Press Enter to stop It)</em>");
 
-                    const frames = [
-                        `.cccc;;cc;';c.           
+                    const frames = [`
+                        .cccc;;cc;';c.           
                       .,:dkdc:;;:c:,:d:.          
                      .loc'.,cc::c:::,..;:.        
                    .cl;....;dkdccc::,...c;        
@@ -519,7 +591,7 @@ cNd.........................................;lOc  `
                     let frameIndex = 0;
 
                     const animBlock = document.createElement('pre');
-                    animBlock.style.color = "#ff55ff";
+                    animBlock.style.color = "#ffffff";
                     terminalOutput.appendChild(animBlock);
 
                     parrotInterval = setInterval(() => {
