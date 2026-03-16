@@ -102,9 +102,9 @@ I hope you like this WebOS! Byee!
                 <i class="fa-solid fa-arrow-left"></i>
                 <i class="fa-solid fa-arrow-right"></i>
                 <i class="fa-solid fa-rotate-right" onclick="document.getElementById('browser-frame').src += ''"></i>
-                <input type="text" id="browser-url" placeholder="Search with DuckDuckGo or enter URL..." onkeydown="handleBrowser(event)">
+                <input type="text" id="browser-url" placeholder="Search with Wikipedia or enter URL available..." onkeydown="handleBrowser(event)">
             </div>
-            <iframe id="browser-frame" class="browser-frame" src="https://lite.duckduckgo.com/lite/"></iframe>
+            <iframe id="browser-frame" class="browser-frame" src="https://www.wikipedia.org"></iframe>
         </div>
 
         <div class="window" id="window-music">
@@ -145,7 +145,7 @@ I hope you like this WebOS! Byee!
                     <div class="settings-tab" onclick="switchSettings('network', this)"><i class="fa-solid fa-wifi"></i> Network</div>
                     <div class="settings-tab" onclick="switchSettings('audio', this)"><i class="fa-solid fa-volume-high"></i> Audio</div>
                 </div>
-                <div class="settings-content">
+                <div id="sec-customization" class="settings-section active">
                     <h3>Wallpaper of Desktop</h3>
                     <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Choose a new Wallpaper for your Desktop</p>
                     <div class="bg-options">
@@ -155,7 +155,7 @@ I hope you like this WebOS! Byee!
                     </div>
                 </div>
 
-                <div id="sec-nete" class="settings-section">
+                <div id="sec-network" class="settings-section">
                     <h3>Settings of Network</h3>
                     <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Current network: Connected</p>
                     <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
@@ -200,7 +200,7 @@ I hope you like this WebOS! Byee!
             <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Folder')">
                 <i class="fa-solid fa-folder"></i>
             </div>
-            <div class="dock-icon" onclick="openWindow('window-browser, Browser')" style="background: #ff5722; color: white;">
+            <div class="dock-icon" onclick="openWindow('window-browser', 'Browser')" style="background: #ff5722; color: white;">
                 <i class="fa-brands fa-firefox-browser"></i>
             </div>
             <div class="dock-icon icon-terminal" onclick="openWindow('window-terminal', 'Terminal')" style="background: #333; color: #4af626;">
@@ -246,7 +246,7 @@ I hope you like this WebOS! Byee!
             document.getElementById('active-app-name').innerText = appName;
 
             if(id === 'window-terminal') {
-                setTimeout(() => document.getElementById('term.input').focus(), 100);
+                setTimeout(() => document.getElementById('term-input').focus(), 100);
             }
         }
 
@@ -330,17 +330,42 @@ I hope you like this WebOS! Byee!
             isPlaying = !isPlaying;
             if (isPlaying) {
                 audioEl.play();
-                playBtn.classList.remove('fa-circle-play');
-                playBtn.classList.add('fa-circle-pause');
+                playBtn.classList.remove('fa-circle-play'); playBtn.classList.add('fa-circle-pause');
             } else {
                 audioEl.pause();
-                playBtn.classList.remove('fa-circle-pause');
-                playBtn.classList.add('fa-circle-play');
+                playBtn.classList.remove('fa-circle-pause'); playBtn.classList.add('fa-circle-play');
             }
+        }
+
+        function syncVolume(value) {
+            const vol = value / 100;
+            audioEl.volume = vol;
+            document.getElementById('top-vol').value = value;
+            document.getElementById('set-vol').value = value;
         }
 
         function changeBackground(url) {
             document.body.style.backgroundImage = `url('${url}')`;
+        }
+
+        function switchSettings(sectionId, element) {
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('sec-' + sectionId).classList.add('active');
+        }
+
+        function handleBrowser(e) {
+            if(e.key === 'Enter') {
+                const urlInput = document.getElementById('browser-url').value;
+                const iframe = document.getElementById('browser-frame');
+
+                if(urlInput.startsWith('http')) {
+                    iframe.src = urlInput;
+                } else {
+                    iframe.src = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(urlInput)}`;
+                }
+            }
         }
 
         const terminalOutput = document.getElementById('terminal-output');
@@ -373,7 +398,7 @@ I hope you like this WebOS! Byee!
                     return;
                 }
 
-                printToTerminal(`<span class="prompt">breiscot@os:~$</span> $(cmd)`);
+                printToTerminal(`<span class="prompt">breiscot@os:~$</span> ${cmd}`);
 
                 if (cmd === '') return;
 
