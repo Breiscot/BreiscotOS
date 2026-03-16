@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <audio id="my-audio" src="audio/Let Down (Remastered).mp3"></audio>
+    <audio id="my-audio"></audio>
 
     <div id="lockscreen">
         <div class="clock-large" id="lock-clock">12:00</div>
@@ -122,7 +122,7 @@ I hope you like this WebOS! Byee!
             <iframe id="browser-frame" class="browser-frame" src="https://www.wikipedia.org"></iframe>
         </div>
 
-        <div class="window" id="window-music">
+        <div class="window" id="window-music" style="width: 500px; height: 600px;">
             <div class="window-header" id="window-music-header">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-music')"></div>
@@ -133,13 +133,29 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="window-content">
                 <div class="music-player">
-                    <div class="album-art"></div>
-                    <h2 style="margin-bottom: 5px; font-weight: 600;">Let Down</h2>
-                    <p style="color: #aaa; margin-bottom: 30px;">RadioHead</p>
+                    <div class="album-art" id="album-art"></div>
+                    <h2 id="song-title" style="margin-bottom: 5px; font-weight: 600;">No song selected</h2>
+                    <p id="song-artist" style="color: #aaa; margin-bottom: 20px;">Choose a track</p>
+
                     <div class="music-controls">
-                        <i class="fa-solid fa-backward-step"></i>
+                        <i class="fa-solid fa-backward-step" onclick="prevTrack()"></i>
                         <i class="fa-solid fa-circle-play" id="play-btn" onclick="togglePlay()"></i>
-                        <i class="fa-solid fa-forward-step"></i>
+                        <i class="fa-solid fa-forward-step" onclick="nextTrack()"></i>
+                    </div>
+
+                    <div class="playlist">
+                        <div class="playlist-item" onclick="loadTrack(0)">
+                            <span>Let Down</span>
+                            <small>Radiohead</small>
+                        </div>
+                        <div class="playlist-item" onclick="loadTrack(1)">
+                            <span>Placing The Blade</span>
+                            <small>Self</small>
+                        </div>
+                        <div class="playlist-item" onclick="loadTrack(2)">
+                            <span>blue</span>
+                            <small>yung kai</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -338,19 +354,89 @@ I hope you like this WebOS! Byee!
         windowIDs.forEach(id => makeDraggable(document.getElementById(id), document.getElementById(id + '-header')));
 
         const audioEl = document.getElementById('my-audio');
+        const playBtn = document.getElementById('play-btn');
+        const songTitle = document.getElementById('song-title');
+        const songArtist = document.getElementById('song-artist');
+        const albumArt = document.getElementById('album-art');
+
+        const tracks = [
+            {
+                title: "Let Down",
+                artist: "Radiohead",
+                src: "audio/Let Down (Remastered).mp3",
+                cover: "images/let_down_music.png",
+            },
+            {
+                title: "Placing The Blame",
+                artist: "Self",
+                src: "audio/Placing The Blame.mp3",
+                cover: "images/placing_the_blame_music.png",
+            },
+            {
+                title: "blue",
+                artist: "yung kai",
+                src: "audio/yung kai - blue.mp3",
+                cover: "images/blue_yung_kai.png",
+            }
+        ];
+
+        let currentTrack = 0;
         let isPlaying = false;
 
-        function togglePlay() {
-            const playBtn = document.getElementById('play-btn');
-            isPlaying = !isPlaying;
+        function updatePlaylistUI() {
+            document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                item.classList.toggle('active', index === currentTrack);
+            });
+        }
+
+        function loadTrack(index) {
+            currentTrack = index;
+            audioEl.src = tracks[index].src;
+            songTitle.innerText = tracks[index].title;
+            songArtist.innerText = tracks[index].artist;
+            albumArt.style.backgroundImage = `url('${tracks[index].cover}')`;
+            updatePlaylistUI();
+
             if (isPlaying) {
                 audioEl.play();
-                playBtn.classList.remove('fa-circle-play'); playBtn.classList.add('fa-circle-pause');
-            } else {
-                audioEl.pause();
-                playBtn.classList.remove('fa-circle-pause'); playBtn.classList.add('fa-circle-play');
             }
         }
+
+        function togglePlay() {
+            if (!audioEl.src) {
+                loadTrack(currentTrack);
+            }
+
+            isPlaying = !isPlaying;
+
+            if (isPlaying) {
+                audioEl.play();
+                playBtn.classList.remove('fa-circle-play');
+                playBtn.classList.add('fa-circle-pause');
+            } else {
+                audioEl.pause();
+                playBtn.classList.remove('fa-circle-pause');
+                playBtn.classList.add('fa-circle-play');
+            }
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % tracks.length;
+            loadTrack(currentTrack);
+            if (isPlaying) audioEl.play();
+        }
+
+        function prevTrack() {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+            loadTrack(currentTrack);
+            if (isPlaying) audioEl.play();
+        }
+
+        audioEl.addEventListener('ended', () => {
+            nextTrack();
+        });
+
+        loadTrack(0);
 
         function syncVolume(value) {
             const vol = value / 100;
