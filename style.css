@@ -306,6 +306,14 @@
             background-color: #111; 
         }
 
+        .model-viewer-container {
+            flex-grow: 1;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .browser-bar {
             height: 40px;
             background: #ddd;

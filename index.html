@@ -6,6 +6,7 @@
     <title>BreiscotOS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
     <audio id="my-audio"></audio>
@@ -51,6 +52,9 @@
                     </div>
                     <div class="file-item" onclick="openWindow('window-photo', 'Image')">
                         <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Image.jpg</span>
+                    </div>
+                    <div class="file-item" onclick="openWindow('window-model', '3D Viewer')">
+                        <i class="fa-solid fa-cube" style="color: #7dd3fc;"></i><span>Model.glb</span>
                     </div>
                     <div class="file-item"><i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Projects</span></div>
                 </div>
@@ -104,6 +108,27 @@ I hope you like this WebOS! Byee!
             <div class="photo-viewer" style="background-image: url('images/ceiling_avatar.png');"></div>
         </div>
 
+        <div class="window" id="window-model">
+            <div class="window-header" id="window-model-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-model')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-model')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-model')"></div>
+                </div>
+                <div class="window-title">3D Viewer - Model.glb</div>
+            </div>
+            <div class="model-viewer-container">
+                <model-viewer
+                    src="models/model_ceiling.glb"
+                    alt="3D model"
+                    auto-rotate
+                    camera-controls
+                    shadow-intensity="1"
+                    style="width: 100%; height: 100%; background: #111;">
+                </model-viewer>
+            </div>
+        </div>
+
         <div class="window" id="window-browser" style="width: 800px; height: 500px;">
             <div class="window-header" id="window-browser-header">
                 <div class="window-controls">
@@ -122,7 +147,7 @@ I hope you like this WebOS! Byee!
             <iframe id="browser-frame" class="browser-frame" src="https://www.wikipedia.org"></iframe>
         </div>
 
-        <div class="window" id="window-music" style="width: 500px; height: 600px;">
+        <div class="window" id="window-music" style="background-color: #33333383; width: 500px; height: 600px;">
             <div class="window-header" id="window-music-header">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-music')"></div>
@@ -350,7 +375,7 @@ I hope you like this WebOS! Byee!
             }
         }
 
-        const windowIDs = ['window-folder', 'window-music', 'window-settings', 'window-terminal', 'window-notepad', 'window-photo', 'window-browser'];
+        const windowIDs = ['window-folder', 'window-music', 'window-settings', 'window-terminal', 'window-notepad', 'window-photo', 'window-model', 'window-browser'];
         windowIDs.forEach(id => makeDraggable(document.getElementById(id), document.getElementById(id + '-header')));
 
         const audioEl = document.getElementById('my-audio');
