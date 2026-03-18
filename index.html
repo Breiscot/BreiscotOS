@@ -269,6 +269,9 @@ I hope you like this WebOS! Byee!
             <div class="dock-icon icon-settings" onclick="openWindow('window-settings', 'Settings')" style="background: #8e8e93; color: white;">
                 <i class="fa-solid fa-gear"></i>
             </div>
+
+            <div class="dock-separator"></div>
+            <div id="running-apps"></div>
         </div>
     </div>
 
@@ -299,8 +302,10 @@ I hope you like this WebOS! Byee!
         function openWindow(id, appName) {
             const win = document.getElementById(id);
             win.style.display = 'flex';
+            win.classList.remove('minimizing');
             win.style.zIndex = ++zIndexCounter;
             document.getElementById('active-app-name').innerText = appName;
+            addRunningApp(id);
 
             if(id === 'window-terminal') {
                 setTimeout(() => document.getElementById('term-input').focus(), 100);
@@ -310,6 +315,7 @@ I hope you like this WebOS! Byee!
         function closeWindow(id) {
             document.getElementById(id).style.display = 'none';
             document.getElementById('active-app-name').innerText = 'BreiscotOS';
+            removeRunningApp(id);
             if(id === 'window-terminal') stopParrot();
         }
 
@@ -374,6 +380,39 @@ I hope you like this WebOS! Byee!
                 document.onmouseup = null;
                 document.onmousemove = null;
             }
+        }
+
+        const runningApps = document.getElementById('running-apps');
+
+        const appRegistry = {
+            'window-notepad': { name: 'NotePad', icon: 'fa-file-lines', color: '#ffffff' },
+            'window-photo': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
+            'window-model': { name: '3D Viewer', icon: 'fa-cube', color: '#7dd3fc' },
+            'window-folder': { name: 'Folder', icon: 'fa-folder', color: '#9face6' },
+            'window-terminal': { name: 'Terminal', icon: 'fa-terminal', color: '#4af626' },
+            'window-music': { name: 'Music', icon: 'fa-music', color: '#f093fb' },
+            'window-settings': { name: 'Settings', icon: 'fa-gear', color: '#d1d1d1' },
+            'window-projects': { name: 'Projects', icon: 'fa-folder-tree', color: '#ffbd2e' },
+            'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' }
+        };
+
+        function addRunningApp(windowId) {
+            if (!appRegistry[windowId]) return;
+            if (document.querySelector(`[data-window="${windowId}"]`)) return;
+
+            const app = appRegistry[windowId];
+            const icon = document.createElement('div');
+            icon.className = 'running-app-icon';
+            icon.dataset.window = windowId;
+            icon.onclick = () => openWindow(windowId, app.name);
+            icon.innerHTML = `<i class="fa-solid ${app.icon}" style="color:${app.color};"></i>`;
+
+            runningApps.appendChild(icon);
+        }
+
+        function removeRunningApp(windowId) {
+            const icon = document.querySelector(`[data-window="${windowId}"]`);
+            if (icon) icon.remove();
         }
 
         const windowIDs = ['window-folder', 'window-music', 'window-settings', 'window-terminal', 'window-notepad', 'window-photo', 'window-model', 'window-browser'];
