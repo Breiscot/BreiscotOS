@@ -32,6 +32,7 @@
                 <input type="range" id="top-vol" class="vol-slider" min="0" max="100" value="100" oninput="syncVolume(this.value)">
                 <i class="fa-solid fa-wifi" style="margin-left: 10px;"></i>
                 <i class="fa-solid fa-battery-full"></i>
+                <i class="fa-solid fa-moon topbar-action" onclick="sleepOS()"></i>
                 <span id="top-clock" style="margin-left: 5px;">12:00</span>
             </div>
         </div>
@@ -468,6 +469,25 @@ I hope you like this WebOS! Byee!
             audioEl.volume = vol;
             document.getElementById('top-vol').value = value;
             document.getElementById('set-vol').value = value;
+        }
+
+        function sleepOS() {
+            lockscreen.style.display = 'flex';
+            setTimeout(() => {
+                lockscreen.classList.remove('unlocked');
+        }, 10);
+
+        desktop.classList.remove('active');
+
+        audioEl.pause();
+        isPlaying = false
+        const playBtn = document.getElementById('play-btn');
+        if (playBtn) {
+            playBtn.classList.remove('fa-circle-pause');
+            playBtn.classList.add('fa-circle-play');
+        }
+
+        document.getElementById('active-app-name').innerText = 'BreiscotOS';
         }
 
         function changeBackground(url) {
