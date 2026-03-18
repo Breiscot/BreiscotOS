@@ -320,7 +320,13 @@ I hope you like this WebOS! Byee!
         }
 
         function minimizeWindow(id) {
-            document.getElementById(id).style.display = 'none';
+            const win = document.getElementById(id);
+            win.classList.add('minimizing');
+
+            setTimeout(() => {
+                win.style.display = 'none';
+                win.classList.add('minimizing');
+            }, 280);
         }
 
         function maximizeWindow(id) {
