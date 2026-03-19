@@ -147,8 +147,21 @@ I hope you like this WebOS! Byee!
                         <i class="fa-solid fa-file-code" style="color: #4da6ff;"></i>
                         <span>MineAndSurvive-CampFire_Game.exe</span>
                     </div>
-                    <iframe src="games/MineAndSurvive-campfire-game-main/MineAndSurvive/index.html" class="game-frame"></iframe>
                 </div>
+            </div>
+        </div>
+
+        <div class="window" id="window-game" style="width: 1000px; height: 700px;">
+            <div class="window-header" id="window-game-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-game')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-game')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-game')"></div>
+                </div>
+                <div class="window-title">MineAndSurvive-CampFire_Game.exe</div>
+            </div>
+            <div class="game-container">
+                <iframe src="games/MineAndSurvive-campfire-game-main/MineAndSurvive/index.html" class="game-frame"></iframe>
             </div>
         </div>
 
@@ -443,8 +456,27 @@ I hope you like this WebOS! Byee!
             if (icon) icon.remove();
         }
 
-        const windowIDs = ['window-folder', 'window-music', 'window-settings', 'window-terminal', 'window-notepad', 'window-photo', 'window-model', 'window-projects', 'window-browser', 'window-game'];
-        windowIDs.forEach(id => makeDraggable(document.getElementById(id), document.getElementById(id + '-header')));
+        const windowIDs = [
+            'window-folder',
+            'window-music',
+            'window-settings',
+            'window-terminal',
+            'window-notepad',
+            'window-photo',
+            'window-model',
+            'window-projects',
+            'window-browser',
+            'window-game'
+        ];
+        
+        windowIDs.forEach(id => {
+            const win = document.getElementById(id);
+            const header = document.getElementById(id + '-header');
+
+            if (win && header) {
+                makeDraggable(win, header);
+            }
+        });
 
         const audioEl = document.getElementById('my-audio');
         const playBtn = document.getElementById('play-btn');
