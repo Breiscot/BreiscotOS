@@ -373,6 +373,13 @@
             justify-content: center;
         }
 
+        .game-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #111;
+        }
+
         .browser-bar {
             height: 40px;
             background: #ddd;
