@@ -44,7 +44,7 @@
                     <div class="control-btn btn-min" onclick="minimizeWindow('window-folder')"></div>
                     <div class="control-btn btn-max" onclick="maximizeWindow('window-folder')"></div>
                 </div>
-                <div class="window-title">Documents</div>
+                <div class="window-title">Main Folder</div>
             </div>
             <div class="window-content">
                 <div class="folder-grid">
@@ -229,6 +229,32 @@ I hope you like this WebOS! Byee!
             </div>
         </div>
 
+        <div class="window" id="window-clock" style="width: 700px; height: 500px;">
+            <div class="window-header" id="window-clock-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-clock')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-clock')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-clock')"></div>
+                </div>
+                <div class="window-title">Clock</div>
+            </div>
+
+            <div class="clock-app">
+                <div class="clock-sidebar">
+                    <div class="clock-tab active" onclick="switchClockTab('stopwatch', this)">
+                        <i class="fa-solid fa-stopwatch"></i> Stopwatch
+                    </div>
+                    <div class="clock-tab" onclick="switchClockTab('timer', this)">
+                        <i class="fa-solid fa-hourglass-half"></i> Timer
+                    </div>
+                    <div class="clock-tab" onclick="switchClockTab('world', this)">
+                        <i class="fa-solid fa-globe"></i> World Clock
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
         <div class="window" id="window-settings">
             <div class="window-header" id="window-settings-header">
                 <div class="window-controls">
@@ -310,6 +336,9 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="dock-icon icon-settings" onclick="openWindow('window-settings', 'Settings')" style="background: #8e8e93; color: white;">
                 <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="dock-icon" onclick="openWindow('window-clock', 'Clock')" style="background: #1f2937; color: white;">
+                <i class="fa-regular fa-clock"></i>
             </div>
 
             <div class="dock-separator"></div>
