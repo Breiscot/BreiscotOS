@@ -396,6 +396,123 @@ I hope you like this WebOS! Byee!
     </div>
 
     <script>
+        function switchClockTab(tabId, element) {
+            document.querySelectorAll('.clock-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.clock-section').forEach(section => section.classList.remove('active'));
+
+            element.classList.add('active');
+            document.getElementById('clock-' + tabId).classList.add('active');
+        }
+
+        let stopwatchInterval = null;
+        let stopwatchTime = 0;
+
+        function formatStopwatch(ms) {
+            const totalCentiseconds = Math.floor(ms / 10);
+            const hours = String(Math.floor(totalCentiseconds / 360000)).padStart(2, '0');
+            const minutes = String(Math.floor((totalCentiseconds % 360000) / 6000)).padStart(2, '0');
+            const seconds = String(Math.floor((totalCentiseconds % 6000) / 100)).padStart(2, '0');
+            const centiseconds = String(totalCentiseconds % 100).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}.${centiseconds}`;
+        }
+
+        function updateStopwatchDisplay() {
+            document.getElementById('stopwatch-display').innerText = formatStopwatch(stopwatchTime);
+        }
+
+        function startStopwatch() {
+            if (stopwatchInterval) return;
+            const start = Date.now() - stopwatchTime;
+            stopwatchInterval = setInterval(() => {
+                stopwatchTime = Date.now() - start;
+                updateStopwatchDisplay();
+            }, 10);
+        }
+
+        function pauseStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+        }
+
+        function resetStopwatch() {
+            pauseStopwatch();
+            stopwatchTime = 0;
+            updateStopwatchDisplay();
+        }
+
+        let timerInterval = null;
+        let timerRemaining = 60;
+
+        function formatTimer(seconds) {
+            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer-display').innerText = formatTimer(timerRemaining);
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+
+            if (timerRemaining <= 0) {
+                const mins = parseInt(document.getElementById('timer-minutes').value) || 0;
+                const secs = parseInt(document.getElementById('timer-seconds').value) || 0;
+                timerRemaining = mins * 60 + secs;
+                updateTimerDisplay();
+            }
+
+            timerInterval = setInterval(() => {
+                if (timerRemaining > 0) {
+                    timerRemaining--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    alert('Timer finished.');
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            const mins = parseInt(document.getElementById('timer-minutes').value) || 0;
+            const secs = parseInt(document.getElementById('timer-seconds').value) || 0;
+            timerRemaining = mins * 60 + secs;
+            updateTimerDisplay();
+        }
+
+        document.getElementById('timer-minutes').addEventListener('input', resetTimer);
+        document.getElementById('timer-seconds').addEventListener('input', resetTimer);
+
+        function updateWorldClocks() {
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+            document.getElementById('world-rome').innerText =
+                new Date().toLocaleTimeString('it-IT', { ...options, timeZone: 'Europe/Rome' });
+
+            document.getElementById('world-newyork').innerText =
+                new Date().toLocaleTimeString('en-US', { ...options, timeZone: 'America/New_York' });
+            
+            document.getElementById('world-tokyo').innerText =
+                new Date().toLocaleTimeString('ja-JP', { ...options, timeZone: 'Asia/Tokyo' });
+
+            document.getElementById('world-sydney').innerText =
+                new Date().toLocaleTimeString('en-AU', { ...options, timeZone: 'Australia/Sydney' });
+        }
+
+        setInterval(updateWorldClocks, 1000);
+        updateWorldClocks();
+        updateStopwatchDisplay();
+        resetTimer();
+
+
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -519,7 +636,8 @@ I hope you like this WebOS! Byee!
             'window-music': { name: 'Music', icon: 'fa-music', color: '#f093fb' },
             'window-settings': { name: 'Settings', icon: 'fa-gear', color: '#d1d1d1' },
             'window-projects': { name: 'Projects', icon: 'fa-folder-tree', color: '#ffbd2e' },
-            'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' }
+            'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' },
+            'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' }
         };
 
         function addRunningApp(windowId) {
@@ -551,7 +669,8 @@ I hope you like this WebOS! Byee!
             'window-model',
             'window-projects',
             'window-browser',
-            'window-game'
+            'window-game',
+            'window-clock'
         ];
         
         windowIDs.forEach(id => {
