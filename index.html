@@ -60,6 +60,9 @@
                     <div class="file-item" onclick="openWindow('window-projects', 'Projects')">
                         <i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Projects</span>
                     </div>
+                    <div class="file-item" onclick="openWindow('window-games', 'Games')">
+                        <i class="fa-solid fa-folder" style="color: #ffbd2e;"></i><span>Games</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,6 +121,30 @@ I hope you like this WebOS! Byee!
             <div class="photo-viewer" style="background-image: url('images/ceiling_avatar.png');"></div>
         </div>
 
+        <div class="window" id="window-black-hole-image">
+            <div class="window-header" id="window-black-hole-image-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-black-hole-image')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-black-hole-image')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-black-hole-image')"></div>
+                </div>
+                <div class="window-title">Black_Hole by Breiscot.png</div>
+            </div>
+            <div class="photo-viewer" style="background-image: url('images/Black_Hole\ by\ Breiscot.png');"></div>
+        </div>
+
+        <div class="window" id="window-elden-ring-image">
+            <div class="window-header" id="window-elden-ring-image-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-elden-ring-image')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-elden-ring-image')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-elden-ring-image')"></div>
+                </div>
+                <div class="window-title">Elden_Tree by Breiscot.png</div>
+            </div>
+            <div class="photo-viewer" style="background-image: url('images/Elden_Tree\ by\ Breiscot.png');"></div>
+        </div>
+
         <div class="window" id="window-model">
             <div class="window-header" id="window-model-header">
                 <div class="window-controls">
@@ -147,6 +174,27 @@ I hope you like this WebOS! Byee!
                     <div class="control-btn btn-max" onclick="maximizeWindow('window-projects')"></div>
                 </div>
                 <div class="window-title">Projects</div>
+            </div>
+            <div class="window-content">
+                <div class="folder-grid">
+                    <div class="file-item" onclick="openWindow('window-black-hole-image', 'Image')">
+                        <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Black_Hole by Breiscot.png</span>
+                    </div>
+                    <div class="file-item" onclick="openWindow('window-elden-ring-image', 'Image')">
+                        <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Elden_Tree by Breiscot.png</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="window-games">
+            <div class="window-header" id="window-games-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-games')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-games')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-games')"></div>
+                </div>
+                <div class="window-title">Games</div>
             </div>
             <div class="window-content">
                 <div class="folder-grid">
@@ -326,6 +374,8 @@ I hope you like this WebOS! Byee!
                         <div class="bg-preview" style="background-image: url(images/background1.png);" onclick="changeBackground('images/background1.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/milkyway_bg.png);" onclick="changeBackground('images/milkyway_bg.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/ceiling_avatar.png);" onclick="changeBackground('images/ceiling_avatar.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/Black_Hole\ by\ Breiscot.png);" onclick="changeBackground('images/Black_Hole by Breiscot.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/Elden_Tree\ by\ Breiscot.png);" onclick="changeBackground('images/Elden_Tree by Breiscot.png')"></div>
                     </div>
                 </div>
 
@@ -636,6 +686,7 @@ I hope you like this WebOS! Byee!
             'window-music': { name: 'Music', icon: 'fa-music', color: '#f093fb' },
             'window-settings': { name: 'Settings', icon: 'fa-gear', color: '#d1d1d1' },
             'window-projects': { name: 'Projects', icon: 'fa-folder-tree', color: '#ffbd2e' },
+            'window-games': { name: 'Games', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' }
         };
@@ -666,10 +717,13 @@ I hope you like this WebOS! Byee!
             'window-terminal',
             'window-notepad',
             'window-photo',
+            'window-black-hole-image',
+            'window-elden-ring-image',
             'window-model',
             'window-projects',
             'window-browser',
             'window-game',
+            'window-games',
             'window-clock'
         ];
         
