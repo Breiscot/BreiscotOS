@@ -251,7 +251,56 @@ I hope you like this WebOS! Byee!
                         <i class="fa-solid fa-globe"></i> World Clock
                     </div>
                 </div>
-                
+
+                <div class="clock-content">
+                    <div id="clock-stopwatch" class="clock-section active">
+                        <h2>Stopwatch</h2>
+                        <div class="clock-big-display" id="stopwatch-display">00:00:00.00</div>
+                        <div class="clock-buttons">
+                            <button onclick="startStopwatch()">Start</button>
+                            <button onclick="pauseStopwatch()">Pause</button>
+                            <button onclick="resetStopwatch()">Reset</button>
+                        </div>
+                    </div>
+
+                    <div id="clock-timer" class="clock-section">
+                        <h2>Timer</h2>
+                        <div class="timer-inputs">
+                            <input type="number" id="timer-minutes" min="0" max="999" value="1">
+                            <span>min</span>
+                            <input type="number" id="timer-seconds" min="0" max="59" value="0">
+                            <span>sec</span>
+                        </div>
+                        <div class="clock-big-display" id="timer-display">01:00</div>
+                        <div class="clock-buttons">
+                            <button onclick="startTimer()">Start</button>
+                            <button onclick="pauseTimer()">Pause</button>
+                            <button onclick="resetTimer()">Reset</button>
+                        </div>
+                    </div>
+
+                    <div id="clock-world" class="clock-section">
+                        <h2>World Clock</h2>
+                        <div class="world-clock-list">
+                            <div class="world-clock-item">
+                                <span>Rome</span>
+                                <strong id="world-rome">--:--:--</strong>
+                            </div>
+                            <div class="world-clock-item">
+                                <span>New York</span>
+                                <strong id="world-newyork">--:--:--</strong>
+                            </div>
+                            <div class="world-clock-item">
+                                <span>Tokyo</span>
+                                <strong id="world-tokyo">--:--:--</strong>
+                            </div>
+                            <div class="world-clock-item">
+                                <span>Sydney</span>
+                                <strong id="world-sydney">--:--:--</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
