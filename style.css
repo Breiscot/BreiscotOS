@@ -442,17 +442,26 @@
         }
 
         .bg-options {
-            display: flex; gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 100px));
+            gap: 15px;
         }
+
         .bg-preview {
-            width: 100px; height: 60px;
+            width: 100px;
+            height: 60px;
             border-radius: 8px;
             border: 2px solid transparent;
             cursor: pointer;
-            background-size: cover; background-position: center;
-            transition: transform 0.2s;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.2s, border 0.2s;
         }
-        .bg-preview:hover { transform: scale(1.05); border: 2px solid white;}
+
+        .bg-preview:hover { 
+            transform: scale(1.05);
+            border: 2px solid white;
+        }
 
         .terminal-content {
             flex-grow: 1;

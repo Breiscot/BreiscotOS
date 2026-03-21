@@ -404,6 +404,7 @@ I hope you like this WebOS! Byee!
                     <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px;">Choose a new Wallpaper for your Desktop</p>
                     <div class="bg-options">
                         <div class="bg-preview" style="background-image: url(images/background1.png);" onclick="changeBackground('images/background1.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/background2.png);" onclick="changeBackground('images/background2.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/milkyway_bg.png);" onclick="changeBackground('images/milkyway_bg.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/ceiling_avatar.png);" onclick="changeBackground('images/ceiling_avatar.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/Black_Hole\ by\ Breiscot.png);" onclick="changeBackground('images/Black_Hole by Breiscot.png')"></div>
@@ -597,6 +598,91 @@ I hope you like this WebOS! Byee!
         updateStopwatchDisplay();
         resetTimer();
 
+        const paintCanvas = document.getElementById('paint-canvas');
+        const paintCtx = paintCanvas.getContext('2d');
+        const paintColor = document.getElementById('paint-color');
+        const paintSize = document.getElementById('paint-size');
+
+        let painting = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function resizePaintCanvas() {
+            if (!paintCanvas) return;
+
+            const tempImage = paintCanvas.toDataURL();
+
+            paintCanvas.width = paintCanvas.offsetWidth;
+            paintCanvas.height = paintCanvas.offsetHeight;
+
+            const img = new Image();
+            img.onload = () => {
+                paintCtx.fillStyle = "white";
+                paintCtx.fillRect(0, 0, paintCanvas.width, paintCanvas.height);
+                paintCtx.drawImage(img, 0, 0);
+            };
+            img.src = tempImage;
+        }
+
+        function initPaintCanvas() {
+            if (!paintCanvas) return;
+            resizePaintCanvas();
+            paintCtx.fillStyle = "white";
+            paintCtx.fillRect(0, 0, paintCanvas.width, paintCanvas.height);
+            paintCtx.lineCap = "round";
+            paintCtx.lineJoin = "round";
+        }
+
+        function startPainting(e) {
+            painting = true;
+            const rect = paintCanvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function drawPaint(e) {
+            if (!painting) return;
+            const rect = paintCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top
+
+            paintCtx.strokeStyle = paintColor.value;
+            paintCtx.lineWidth = paintSize.value;
+
+            paintCtx.beginPath();
+            paintCtx.moveTo(lastX, lastY);
+            paintCtx.lineTo(x, y);
+            paintCtx.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+
+        function stopPainting() {
+            painting = false;
+        }
+
+        function clearCanvas() {
+            paintCtx.fillStyle = "white";
+            paintCtx.fillRect(0, 0, paintCanvas.width, paintCanvas.height);
+        }
+
+        function saveCanvas() {
+            const link = document.createElement('a');
+            link.download = 'breiscot-os-paint.png';
+            link.href = paintCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        paintCanvas.addEventListener('mousedown', startPainting);
+        paintCanvas.addEventListener('mousemove', drawPaint);
+        paintCanvas.addEventListener('mouseup', stopPainting);
+        paintCanvas.addEventListener('mouseleave', stopPainting);
+
+        window.addEventListener('resize', resizePaintCanvas);
+
+        setTimeout(initPaintCanvas, 200);
+
 
         function updateClock() {
             const now = new Date();
@@ -631,6 +717,12 @@ I hope you like this WebOS! Byee!
 
             if(id === 'window-terminal') {
                 setTimeout(() => document.getElementById('term-input').focus(), 100);
+            }
+
+            if (id === 'window-paint') {
+                setTimeout(() => {
+                    resizePaintCanvas();
+                }, 100);
             }
         }
 
@@ -723,7 +815,8 @@ I hope you like this WebOS! Byee!
             'window-projects': { name: 'Projects', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-games': { name: 'Games', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' },
-            'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' }
+            'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' },
+            'window-paint': { name: 'Paint', icon: 'fa-paintbrush', color: '#22c55e' }
         };
 
         function addRunningApp(windowId) {
@@ -759,7 +852,8 @@ I hope you like this WebOS! Byee!
             'window-browser',
             'window-game',
             'window-games',
-            'window-clock'
+            'window-clock',
+            'window-paint'
         ];
         
         windowIDs.forEach(id => {
