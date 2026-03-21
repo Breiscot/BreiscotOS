@@ -238,6 +238,38 @@ I hope you like this WebOS! Byee!
             <iframe id="browser-frame" class="browser-frame" src="https://www.wikipedia.org"></iframe>
         </div>
 
+        <div class="window" id="window-paint" style="width: 900px; height: 650px;">
+            <div class="window-header" id="window-paint-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-paint')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-paint')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-paint')"></div>
+                </div>
+                <div class="window-title">Paint</div>
+            </div>
+
+            <div class="paint-app">
+                <div class="paint-toolbar">
+                    <label>
+                        Color
+                        <input type="color" id="paint-color" value="#ffffff">
+                    </label>
+
+                    <label>
+                        Size
+                        <input type="range" id="paint-size" min="1" max="30" value="4">
+                    </label>
+
+                    <button onclick="clearCanvas()">Clear</button>
+                    <button onclick="saveCanvas()">Save PNG</button>
+                </div>
+
+                <div class="paint-canvas-wrap">
+                    <canvas id="paint-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="window" id="window-music" style="background-color: #33333383; width: 500px; height: 600px;">
             <div class="window-header" id="window-music-header">
                 <div class="window-controls">
@@ -438,6 +470,9 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="dock-icon" onclick="openWindow('window-clock', 'Clock')" style="background: #1f2937; color: white;">
                 <i class="fa-regular fa-clock"></i>
+            </div>
+            <div class="dock-icon" onclick="openWindow('window-paint', 'Paint')" style="background: #22c55e; color: white;">
+                <i class="fa-solid fa-paintbrush"></i>
             </div>
 
             <div class="dock-separator"></div>
