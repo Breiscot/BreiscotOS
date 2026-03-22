@@ -846,11 +846,17 @@ I hope you like this WebOS! Byee!
             restoreIframeInWindow(id);
 
             win.style.display = 'flex';
-            win.classList.remove('minimizing');
+            win.classList.remove('minimizing', 'closing');
+            win.classList.add('window-opening');
             win.style.zIndex = ++zIndexCounter;
             win.dataset.minimized = "false";
+
             document.getElementById('active-app-name').innerText = appName;
             addRunningApp(id);
+
+            setTimeout(() => {
+                win.classList.remove('window-opening');
+            }, 280);
 
             if(id === 'window-terminal') {
                 setTimeout(() => document.getElementById('term-input').focus(), 100);
@@ -864,25 +870,35 @@ I hope you like this WebOS! Byee!
 
             updateDockVisibility();
         }
+
         // Script | closeWindow
         function closeWindow(id) {
             const win = document.getElementById(id);
-            // if contain Iframe, destroy it
-            destroyIframeInWindow(id);
+            win.classList.remove('window-opening', 'minimizing');
+            win.classList.add('closing');
 
-            win.style.display = 'none';
-            win.dataset.minimized = "false";
+            setTimeout(() => {
+                // if contain Iframe, destroy it
+                destroyIframeInWindow(id);
 
-            document.getElementById('active-app-name').innerText = 'BreiscotOS';
-            removeRunningApp(id);
+                win.style.display = 'none';
+                win.classList.remove('closing');
+                win.dataset.minimized = "false";
 
-            if(id === 'window-terminal') stopParrot();
-            updateDockVisibility();
+                document.getElementById('active-app-name').innerText = 'BreiscotOS';
+                removeRunningApp(id);
+
+                if (id === 'window-terminal') stopParrot();
+
+                updateDockVisibility();
+            }, 200);
         }
 
         // Script | minimizeWindow
         function minimizeWindow(id) {
             const win = document.getElementById(id);
+
+            win.classList.remove('window-opening', 'closing', 'animating-geometry');
             win.classList.add('minimizing');
             win.dataset.minimized = "true";
 
@@ -890,12 +906,13 @@ I hope you like this WebOS! Byee!
                 win.style.display = 'none';
                 win.classList.add('minimizing');
                 updateDockVisibility();
-            }, 280);
+            }, 380);
         }
 
         // Script | maximizeWindow
         function maximizeWindow(id) {
             const win = document.getElementById(id);
+            win.classList.add('animating-geometry');
 
             if (!win.dataset.maximized || win.dataset.maximized === "false") {
                 win.dataset.origTop = win.style.top || win.offsetTop + "px";
@@ -903,20 +920,28 @@ I hope you like this WebOS! Byee!
                 win.dataset.origWidth = win.style.width || win.offsetWidth + "px";
                 win.dataset.origHeight = win.style.height || win.offsetHeight + "px";
 
-                win.style.top = "32px";
-                win.style.left = "0px";
-                win.style.width = "100vw";
-                win.style.height = "calc(100vh - 32px)";
-                win.dataset.maximized = "true";
+                requestAnimationFrame(() => {
+                    win.style.top = "32px";
+                    win.style.left = "0px";
+                    win.style.width = "100vw";
+                    win.style.height = "calc(100vh - 32px)";
+                    win.dataset.maximized = "true";
+                });
             } else {
-                win.style.top = win.dataset.origTop;
-                win.style.left = win.dataset.origLeft;
-                win.style.width = win.dataset.origWidth;
-                win.style.height = win.dataset.origHeight;
-                win.dataset.maximized = "false";
+                requestAnimationFrame(() => {
+                    win.style.top = win.dataset.origTop;
+                    win.style.left = win.dataset.origLeft;
+                    win.style.width = win.dataset.origWidth;
+                    win.style.height = win.dataset.origHeight;
+                    win.dataset.maximized = "false";
+                });
             }
 
-            updateDockVisibility();
+            setTimeout(() => {
+                win.classList.remove('animating-geometry');
+                if (id === 'window-paint') resizePaintCanvas();
+                updateDockVisibility();
+            }, 330);
         }
 
         const windows = document.querySelectorAll('.window');
@@ -930,8 +955,9 @@ I hope you like this WebOS! Byee!
             headerElement.onmousedown = dragMouseDown;
 
             function dragMouseDown(e) {
-
                 if(windowElement.dataset.maximized === "true") return;
+
+                windowElement.classList.remove('animating-geometry', 'window-opening', 'closing', 'minimizing');
 
                 e.preventDefault();
                 pos3 = e.clientX;

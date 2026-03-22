@@ -231,7 +231,8 @@
 
         .window {
             position: absolute;
-            top: 20%; left: 30%;
+            top: 20%;
+            left: 30%;
             width: 600px;
             height: 400px;
             backdrop-filter: var(--glass-blur);
@@ -242,21 +243,71 @@
             flex-direction: column;
             overflow: hidden;
             transform-origin: center center;
+            will-change: transform, opacity;
         }
 
-        .window-minimizing {
-            animation: minimizeAnim 0.28s ease forwards;
+        .window.window-opening {
+            animation: windowOpenAnim 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        @keyframes minimizeAnim {
+        @keyframes windowOpenAnim {
+            0% {
+                opacity: 0;
+                transform: scale(0.92) translateY(18px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .window.closing {
+            animation: closeAnim 0.2s ease forwards;
+        }
+
+        @keyframes closeAnim {
             0% {
                 opacity: 1;
                 transform: scale(1);
             }
             100% {
                 opacity: 0;
-                transform: scale(0.82) translateY(40px);
+                transform: scale(0.94) translateY(10px);
             }
+        }
+
+        .window-minimizing {
+            animation: minimizeAnim 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes minimizeAnim {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.82) translateY(85px);
+            }
+        }
+
+        .window.maximizing,
+        .window.restoring {
+            transition:
+                top 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                left 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                opacity 0.22s ease,
+                transform 0.22s ease;
+        }
+
+        .window.animating-geometry {
+            transition:
+                top 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                left 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+                height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .window-header {
