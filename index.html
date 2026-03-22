@@ -898,7 +898,10 @@ I hope you like this WebOS! Byee!
         function minimizeWindow(id) {
             const win = document.getElementById(id);
 
-            win.classList.remove('window-opening', 'closing', 'animating-geometry');
+            win.classList.remove('window-opening', 'closing', 'animating-geometry', 'minimizing');
+
+            void win.offsetWidth;
+
             win.classList.add('minimizing');
             win.dataset.minimized = "true";
 
