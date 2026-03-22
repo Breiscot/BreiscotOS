@@ -327,6 +327,12 @@ I hope you like this WebOS! Byee!
                         <i class="fa-solid fa-forward-step" onclick="nextTrack()"></i>
                     </div>
 
+                    <div class="music-progress-wrap">
+                        <span id="current-time">0:00</span>
+                        <input type="range" id="music-progress" min="0" max="100" value="0">
+                        <span id="duration-time">0:00</span>
+                    </div>
+
                     <div class="playlist">
                         <div class="playlist-item" onclick="loadTrack(0)">
                             <span>Let Down</span>
@@ -339,6 +345,10 @@ I hope you like this WebOS! Byee!
                         <div class="playlist-item" onclick="loadTrack(2)">
                             <span>blue</span>
                             <small>yung kai</small>
+                        </div>
+                        <div class="playlist-item" onclick="loadTrack(3)">
+                            <span>Impostor Syndrome</span>
+                            <small>Sidney Gish</small>
                         </div>
                     </div>
                 </div>
@@ -1053,6 +1063,9 @@ I hope you like this WebOS! Byee!
         });
 
         // Script | Music Player
+        const musicProgress = document.getElementById('music-progress');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationTimeEl = document.getElementById('duration-time');
         const audioEl = document.getElementById('my-audio');
         const playBtn = document.getElementById('play-btn');
         const songTitle = document.getElementById('song-title');
@@ -1077,11 +1090,46 @@ I hope you like this WebOS! Byee!
                 artist: "yung kai",
                 src: "audio/yung kai - blue.mp3",
                 cover: "images/blue_yung_kai.png",
+            },
+            {
+                title: "Impostor Syndrome",
+                artist: "Sidney Gish",
+                src: "audio/Impostor Syndrome.mp3",
+                cover: "images/impostor_syndrome.png",
             }
+
         ];
 
         let currentTrack = 0;
         let isPlaying = false;
+
+        function formatAudioTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        audioEl.addEventListener('timeupdate', () => {
+            if (!isNaN(audioEl.duration) && audioEl.duration > 0) {
+                const progress = (audioEl.currentTime / audioEl.duration) * 100;
+                musicProgress.value = progress;
+                currentTimeEl.innerText = formatAudioTime(audioEl.currentTime);
+                durationTimeEl.innerText = formatAudioTime(audioEl.duration);
+            }
+        });
+
+        audioEl.addEventListener('loadedmetadata', () => {
+            durationTimeEl.innerText = formatAudioTime(audioEl.duration);
+            currentTimeEl.innerText = formatAudioTime(audioEl.currentTime);
+        });
+
+        musicProgress.addEventListener('input', () => {
+            if (!isNaN(audioEl.duration) && audioEl.duration > 0) {
+                const seekTime = (musicProgress.value / 100) * audioEl.duration;
+                audioEl.currentTime = seekTime;
+            }
+        });
 
         function updatePlaylistUI() {
             document.querySelectorAll('.playlist-item').forEach((item, index) => {
@@ -1096,6 +1144,10 @@ I hope you like this WebOS! Byee!
             songArtist.innerText = tracks[index].artist;
             albumArt.style.backgroundImage = `url('${tracks[index].cover}')`;
             updatePlaylistUI();
+
+            musicProgress.value = 0;
+            currentTimeEl.innerText = "0:00";
+            durationTimeEl.innerText = "0:00";
 
             if (isPlaying) {
                 audioEl.play();
