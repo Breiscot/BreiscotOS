@@ -85,6 +85,7 @@ In this README I can give you instructions on:
 • Terminal commands you can use.
 • How to use the Browser with available URL.
 • Games folder.
+• Dock features
 
 1. Terminal Commands you can use:
    You can use in the terminal the commands below:
@@ -106,6 +107,10 @@ In this README I can give you instructions on:
    inside you can find some games, in this folder you can find:
 
    MineAndSurvive       |   A mining and survival game, yes the title says all
+
+4. Dock features:
+   The Dock has some features you can see, such as icons popping up when you hover your cursor over icons in the Dock.
+   If you make a window full-screen, you can see the Dock disappear, but if you hover your cursor down, you can see it reappear.
 
 I hope you like this WebOS! Byee!
             </textarea>
@@ -489,25 +494,25 @@ I hope you like this WebOS! Byee!
 
         <!-- Dock -->
         <div id="dock">
-            <div class="dock-icon icon-folder" onclick="openWindow('window-folder', 'Folder')">
+            <div class="dock-icon icon-folder" onclick="toggleWindowFromDock('window-folder', 'Folder')">
                 <i class="fa-solid fa-folder"></i>
             </div>
-            <div class="dock-icon" onclick="openWindow('window-browser', 'Browser')" style="background: #ff5722; color: white;">
+            <div class="dock-icon" onclick="toggleWindowFromDock('window-browser', 'Browser')" style="background: #ff5722; color: white;">
                 <i class="fa-brands fa-firefox-browser"></i>
             </div>
-            <div class="dock-icon icon-terminal" onclick="openWindow('window-terminal', 'Terminal')" style="background: #333; color: #4af626;">
+            <div class="dock-icon icon-terminal" onclick="toggleWindowFromDock('window-terminal', 'Terminal')" style="background: #333; color: #4af626;">
                 <i class="fa-solid fa-terminal"></i>
             </div>
-            <div class="dock-icon icon-music" onclick="openWindow('window-music', 'Music')">
+            <div class="dock-icon icon-music" onclick="toggleWindowFromDock('window-music', 'Music')">
                 <i class="fa-solid fa-music"></i>
             </div>
-            <div class="dock-icon icon-settings" onclick="openWindow('window-settings', 'Settings')" style="background: #8e8e93; color: white;">
+            <div class="dock-icon icon-settings" onclick="toggleWindowFromDock('window-settings', 'Settings')" style="background: #8e8e93; color: white;">
                 <i class="fa-solid fa-gear"></i>
             </div>
-            <div class="dock-icon" onclick="openWindow('window-clock', 'Clock')" style="background: #1f2937; color: white;">
+            <div class="dock-icon" onclick="toggleWindowFromDock('window-clock', 'Clock')" style="background: #1f2937; color: white;">
                 <i class="fa-regular fa-clock"></i>
             </div>
-            <div class="dock-icon" onclick="openWindow('window-paint', 'Paint')" style="background: #22c55e; color: white;">
+            <div class="dock-icon" onclick="toggleWindowFromDock('window-paint', 'Paint')" style="background: #22c55e; color: white;">
                 <i class="fa-solid fa-paintbrush"></i>
             </div>
 
@@ -518,6 +523,95 @@ I hope you like this WebOS! Byee!
 
     <!-- JavaScript -->
     <script>
+        // Script | Dock
+        function hasMaximizedWindow() {
+            return Array.from(document.querySelectorAll('.window')).some(win =>
+                win.style.display !== 'none' && win.dataset.maximized === "true"
+            );
+        }
+
+        function updateDockVisibility(forceShow = false) {
+            const dock = document.getElementById('dock');
+
+            if (hasMaximizedWindow()) {
+                if (forceShow) {
+                    dock.classList.remove('hidden-dock');
+                    dock.classList.add('show-on-hover');
+                } else {
+                    dock.classList.add('hidden-dock');
+                    dock.classList.remove('show-on-hover');
+                }
+            } else {
+                dock.classList.remove('hidden-dock');
+                dock.classList.remove('show-on-hover');
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const dock = document.getElementById('dock');
+            const showZone = window.innerHeight - 20;
+            const keepOpenZone = window.innerHeight - 140;
+
+            if (!hasMaximizedWindow()) {
+                dockPinnedOpen = false;
+                updateDockVisibility(false);
+                return;
+            }
+
+            if (e.clientY >= showZone) {
+                dockPinnedOpen = true;
+                updateDockVisibility(true);
+                return;
+            }
+
+            const dockRect = dock.getBoundingClientRect();
+            const overDock =
+                e.clientX >= dockRect.left &&
+                e.clientX <= dockRect.right &&
+                e.clientY >= dockRect.top &&
+                e.clientY <= dockRect.bottom;
+
+            if (overDock) {
+                dockPinnedOpen = true;
+                updateDockVisibility(true);
+                return;
+            }
+
+            if (dockPinnedOpen && e.clientY >= keepOpenZone) {
+                updateDockVisibility(true);
+                return;
+            }
+
+            dockPinnedOpen = false
+            updateDockVisibility(false);
+        });
+
+        function toggleWindowFromDock(id, appName) {
+            const win = document.getElementById(id);
+            if (!win) return;
+
+            const isHidden = win.style.display === 'none' || getComputedStyle(win).display === 'none';
+            const isMinimized = win.dataset.minimized === "true";
+
+            if (isHidden || isMinimized) {
+                openWindow(id, appName);
+                win.dataset.minimized = "false";
+                return;
+            }
+
+            // if already open, check if is on first plan
+            const topZ = Math.max(...Array.from(document.querySelectorAll('.window')).map(w => parseInt(w.style.zIndex) || 0));
+
+            if ((parseInt(win.style.zIndex) || 0) < topZ) {
+                win.style.zIndex = ++zIndexCounter;
+                document.getElementById('active-app-name').innerText = appName;
+            } else {
+                minimizeWindow(id);
+            }
+        }
+
+        let dockPinnedOpen = false;
+
         // Script | Clock
         function switchClockTab(tabId, element) {
             document.querySelectorAll('.clock-tab').forEach(tab => tab.classList.remove('active'));
@@ -790,10 +884,12 @@ I hope you like this WebOS! Byee!
         function minimizeWindow(id) {
             const win = document.getElementById(id);
             win.classList.add('minimizing');
+            win.dataset.minimized = "true";
 
             setTimeout(() => {
                 win.style.display = 'none';
                 win.classList.add('minimizing');
+                updateDockVisibility();
             }, 280);
         }
 
@@ -819,6 +915,8 @@ I hope you like this WebOS! Byee!
                 win.style.height = win.dataset.origHeight;
                 win.dataset.maximized = "false";
             }
+
+            updateDockVisibility();
         }
 
         const windows = document.querySelectorAll('.window');
@@ -872,6 +970,7 @@ I hope you like this WebOS! Byee!
             'window-projects': { name: 'Projects', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-games': { name: 'Games', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' },
+            'window-minecraft': { name: 'Minecraft', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' },
             'window-paint': { name: 'Paint', icon: 'fa-paintbrush', color: '#22c55e' }
         };
@@ -884,7 +983,7 @@ I hope you like this WebOS! Byee!
             const icon = document.createElement('div');
             icon.className = 'running-app-icon';
             icon.dataset.window = windowId;
-            icon.onclick = () => openWindow(windowId, app.name);
+            icon.onclick = () => toggleWindowFromDock(windowId, app.name);
             icon.innerHTML = `<i class="fa-solid ${app.icon}" style="color:${app.color};"></i>`;
 
             runningApps.appendChild(icon);
