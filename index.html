@@ -210,6 +210,10 @@ I hope you like this WebOS! Byee!
                         <i class="fa-solid fa-file-code" style="color: #4da6ff;"></i>
                         <span>MineAndSurvive-CampFire_Game.exe</span>
                     </div>
+                    <div class="file-item" onclick="openWindow('window-minecraft', 'Minecraft')">
+                        <i class="fa-solid fa-file-code" style="color: #4da6ff;"></i>
+                        <span>Minecraft.exe</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -226,6 +230,21 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="game-container">
                 <iframe src="game/MineAndSurvive-campfire-game-main/MineAndSurvive/index.html" class="game-frame"></iframe>
+            </div>
+        </div>
+
+        <!-- Window | Game Minecraft -->
+        <div class="window" id="window-minecraft" style="width: 1000px; height: 700px;">
+            <div class="window-header" id="window-minecraft-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-minecraft')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-minecraft')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-minecraft')"></div>
+                </div>
+                <div class="window-title">Minecraft.exe</div>
+            </div>
+            <div class="game-container">
+                <iframe id="minecraft-frame" src="https://classic.minecraft.net/" class="game-frame"></iframe>
             </div>
         </div>
 
@@ -730,9 +749,12 @@ I hope you like this WebOS! Byee!
         // Script | openWindow
         function openWindow(id, appName) {
             const win = document.getElementById(id);
+            restoreIframeInWindow(id);
+
             win.style.display = 'flex';
             win.classList.remove('minimizing');
             win.style.zIndex = ++zIndexCounter;
+            win.dataset.minimized = "false";
             document.getElementById('active-app-name').innerText = appName;
             addRunningApp(id);
 
@@ -745,13 +767,23 @@ I hope you like this WebOS! Byee!
                     resizePaintCanvas();
                 }, 100);
             }
+
+            updateDockVisibility();
         }
         // Script | closeWindow
         function closeWindow(id) {
-            document.getElementById(id).style.display = 'none';
+            const win = document.getElementById(id);
+            // if contain Iframe, destroy it
+            destroyIframeInWindow(id);
+
+            win.style.display = 'none';
+            win.dataset.minimized = "false";
+
             document.getElementById('active-app-name').innerText = 'BreiscotOS';
             removeRunningApp(id);
+
             if(id === 'window-terminal') stopParrot();
+            updateDockVisibility();
         }
 
         // Script | minimizeWindow
@@ -877,6 +909,7 @@ I hope you like this WebOS! Byee!
             'window-projects',
             'window-browser',
             'window-game',
+            'window-minecraft',
             'window-games',
             'window-clock',
             'window-paint'
@@ -1297,6 +1330,44 @@ cNd.........................................;lOc  `
                 else {
                     printToTerminal(`bash: ${cmd}: command not found`);
                 }
+            }
+        }
+
+        // Script | iframe Function Generic
+        function resetIframe(iframeId, originalSrc) {
+            const frame = document.getElementById(iframeId);
+            if (!frame) return;
+
+            frame.src = 'about:blank';
+
+            setTimeout(() => {
+                frame.dataset.originalSrc = originalSrc;
+            }, 50);
+        }
+
+        function destroyIframeInWindow(windowId) {
+            const win = document.getElementById(windowId);
+            if (!win) return;
+
+            const frame = win.querySelector('iframe');
+            if (!frame) return;
+
+            if (!frame.dataset.originalSrc) {
+                frame.dataset.originalSrc = frame.src;
+            }
+
+            frame.src = 'about:blank';
+        }
+
+        function restoreIframeInWindow(windowId) {
+            const win = document.getElementById(windowId);
+            if (!win) return;
+
+            const frame = win.querySelector('iframe');
+            if (!frame) return;
+
+            if (frame.src === 'about:blank' && frame.dataset.originalSrc) {
+                frame.src = frame.dataset.originalSrc;
             }
         }
     </script>
