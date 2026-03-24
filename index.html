@@ -107,7 +107,9 @@ In this README I can give you instructions on:
    I added a folder inside the main folder, namely the Games,
    inside you can find some games, in this folder you can find:
 
-   MineAndSurvive       |   A mining and survival game, yes the title says all
+   MineAndSurvive       |   A mining and survival game, yes the title says all (is created by me)
+   Minecraft            |   Is Minecraft (not the original obviously)
+   Slither.io           |   Is Slither.io for web but I added this in Games folder
 
 4. Dock features:
    The Dock has some features you can see, such as icons popping up when you hover your cursor over icons in the Dock.
@@ -865,9 +867,28 @@ I hope you like this WebOS! Byee!
         // Clock of System
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const timeString = now.toLocaleTimeString('it-IT', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const dateString = now.toLocaleDateString('it-IT', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            })
+
             document.getElementById('lock-clock').innerText = timeString;
             document.getElementById('top-clock').innerText = timeString;
+
+            const lockDate = document.getElementById('lock-date');
+            const topDate = document.getElementById('top-date');
+
+            if (lockDate) lockDate.innerText = dateString;
+            if (topDate) topDate.innerText = dateString;
         }
         setInterval(updateClock, 1000);
         updateClock();
