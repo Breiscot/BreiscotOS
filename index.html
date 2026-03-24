@@ -90,6 +90,7 @@ In this README I can give you instructions on:
 1. Terminal Commands you can use:
    You can use in the terminal the commands below:
 
+    clear               |   To clear the terminal
     neofetch            |   To view system information
     curl parrot.live    |   To start the parrot ASCII animation
 
@@ -155,6 +156,19 @@ I hope you like this WebOS! Byee!
             <div class="photo-viewer" style="background-image: url('images/Elden_Tree\ by\ Breiscot.png');"></div>
         </div>
 
+        <!-- Window | Monika Image -->
+        <div class="window" id="window-monika-image">
+            <div class="window-header" id="window-monika-image-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-monika-image')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-monika-image')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-monika-image')"></div>
+                </div>
+                <div class="window-title">monika.png</div>
+            </div>
+            <div class="photo-viewer" style="background-image: url('images/monika.png');"></div>
+        </div>
+
         <!-- Window | Model3D -->
         <div class="window" id="window-model">
             <div class="window-header" id="window-model-header">
@@ -195,6 +209,9 @@ I hope you like this WebOS! Byee!
                     <div class="file-item" onclick="openWindow('window-elden-ring-image', 'Image')">
                         <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Elden_Tree by Breiscot.png</span>
                     </div>
+                    <div class="file-item" onclick="openWindow('window-monika-image', 'Image')">
+                        <i class="fa-solid fa-image" style="color: #f5576c;"></i><span>Monika by Breiscot.png</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,6 +235,10 @@ I hope you like this WebOS! Byee!
                     <div class="file-item" onclick="openWindow('window-minecraft', 'Minecraft')">
                         <i class="fa-solid fa-file-code" style="color: #4da6ff;"></i>
                         <span>Minecraft.exe</span>
+                    </div>
+                    <div class="file-item" onclick="openWindow('window-slither', 'Slither.io')">
+                        <i class="fa-solid fa-file-code" style="color: #4da6ff;"></i>
+                        <span>Slither-io.exe</span>
                     </div>
                 </div>
             </div>
@@ -250,6 +271,21 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="game-container">
                 <iframe id="minecraft-frame" src="https://classic.minecraft.net/" class="game-frame"></iframe>
+            </div>
+        </div>
+
+        <!-- Window | Game Slither.io -->
+        <div class="window" id="window-slither" style="width: 1000px; height: 700px;">
+            <div class="window-header" id="window-slither-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-slither')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-slither')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-slither')"></div>
+                </div>
+                <div class="window-title">Slither.io.exe</div>
+            </div>
+            <div class="game-container">
+                <iframe id="minecraft-frame" src="http://slither.com/io" class="game-frame"></iframe>
             </div>
         </div>
 
@@ -339,7 +375,7 @@ I hope you like this WebOS! Byee!
                             <small>Radiohead</small>
                         </div>
                         <div class="playlist-item" onclick="loadTrack(1)">
-                            <span>Placing The Blade</span>
+                            <span>Placing The Blame</span>
                             <small>Self</small>
                         </div>
                         <div class="playlist-item" onclick="loadTrack(2)">
@@ -433,7 +469,7 @@ I hope you like this WebOS! Byee!
 
         <!-- Window | Settings -->
         <div class="window" id="window-settings">
-            <div class="window-header" id="window-settings-header">
+            <div class="window-header" id="window-settings-header" style="background: rgba(0,0,0,0.5);">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-settings')"></div>
                     <div class="control-btn btn-min" onclick="minimizeWindow('window-settings')"></div>
@@ -455,6 +491,7 @@ I hope you like this WebOS! Byee!
                         <div class="bg-preview" style="background-image: url(images/background2.png);" onclick="changeBackground('images/background2.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/milkyway_bg.png);" onclick="changeBackground('images/milkyway_bg.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/ceiling_avatar.png);" onclick="changeBackground('images/ceiling_avatar.png')"></div>
+                        <div class="bg-preview" style="background-image: url(images/monika.png);" onclick="changeBackground('images/monika.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/Black_Hole\ by\ Breiscot.png);" onclick="changeBackground('images/Black_Hole by Breiscot.png')"></div>
                         <div class="bg-preview" style="background-image: url(images/Elden_Tree\ by\ Breiscot.png);" onclick="changeBackground('images/Elden_Tree by Breiscot.png')"></div>
                     </div>
@@ -482,7 +519,7 @@ I hope you like this WebOS! Byee!
 
         <!-- Window | Terminal -->
         <div class="window terminal-window" id="window-terminal">
-            <div class="window-header" id="window-terminal-header">
+            <div class="window-header" id="window-terminal-header" style="background: rgba(0,0,0,0.5);">
                 <div class="window-controls">
                     <div class="control-btn btn-close" onclick="closeWindow('window-terminal')"></div>
                     <div class="control-btn btn-min" onclick="minimizeWindow('window-terminal')"></div>
@@ -981,12 +1018,28 @@ I hope you like this WebOS! Byee!
 
             function elementDrag(e) {
                 e.preventDefault();
+
                 pos1 = pos3 - e.clientX;
                 pos2 = pos4 - e.clientY;
                 pos3 = e.clientX;
                 pos4 = e.clientY;
-                windowElement.style.top = (windowElement.offsetTop - pos2) + "px";
-                windowElement.style.left = (windowElement.offsetLeft - pos1) + "px";
+
+                let newTop = windowElement.offsetTop - pos2;
+                let newLeft = windowElement.offsetLeft - pos1;
+
+                const topbarHeight = 35
+                const minTop = topbarHeight;
+                const minLeft = 0;
+                const maxLeft = window.innerWidth - windowElement.offsetWidth;
+                const maxTop = window.innerHeight - 60;
+
+                if (newTop < minTop) newTop = minTop;
+                if (newLeft < minLeft) newLeft = minLeft;
+                if (newLeft > maxLeft) newLeft = maxLeft;
+                if (newTop > maxTop) newTop = maxTop;
+
+                windowElement.style.top = newTop + "px";
+                windowElement.style.left = newLeft + "px";
             }
 
             function closeDragElement() {
@@ -1001,6 +1054,9 @@ I hope you like this WebOS! Byee!
         const appRegistry = {
             'window-notepad': { name: 'NotePad', icon: 'fa-file-lines', color: '#ffffff' },
             'window-photo': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
+            'window-black-hole-image': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
+            'window-elden-ring-image': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
+            'window-monika-image': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
             'window-model': { name: '3D Viewer', icon: 'fa-cube', color: '#7dd3fc' },
             'window-folder': { name: 'Folder', icon: 'fa-folder', color: '#9face6' },
             'window-terminal': { name: 'Terminal', icon: 'fa-terminal', color: '#4af626' },
@@ -1010,6 +1066,7 @@ I hope you like this WebOS! Byee!
             'window-games': { name: 'Games', icon: 'fa-folder-tree', color: '#ffbd2e' },
             'window-game': { name: 'MineAndSurvive', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-minecraft': { name: 'Minecraft', icon: 'fa-gamepad', color: '#4da6ff' },
+            'window-slither': { name: 'Slither.io', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' },
             'window-paint': { name: 'Paint', icon: 'fa-paintbrush', color: '#22c55e' }
         };
@@ -1043,11 +1100,13 @@ I hope you like this WebOS! Byee!
             'window-photo',
             'window-black-hole-image',
             'window-elden-ring-image',
+            'window-monika-image',
             'window-model',
             'window-projects',
             'window-browser',
             'window-game',
             'window-minecraft',
+            'window-slither',
             'window-games',
             'window-clock',
             'window-paint'
