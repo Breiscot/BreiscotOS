@@ -13,6 +13,7 @@
     <!-- Lockscreen -->
     <div id="lockscreen">
         <div class="clock-large" id="lock-clock">12:00</div>
+        <div class="lock-date" id="lock-date">W | D | Y</div>
         <div class="login-box">
             <div class="avatar"></div>
             <h3 style="color: white; margin-bottom: 10px; font-weight: 400;">Breiscot</h3>
@@ -26,6 +27,10 @@
             <div class="topbar-left">
                 <i class="fa-brands fa-linux" style="font-size: 1.1rem;"></i>
                 <span id="active-app-name" style="font-weight: 600;">BreiscotOS</span>
+            </div>
+
+            <div class="topbar-center">
+                <span id="top-date">W | D | Y</span>
             </div>
 
             <div class="topbar-right">
@@ -343,6 +348,40 @@ I hope you like this WebOS! Byee!
             </div>
         </div>
 
+        <!-- Window | Calendar -->
+        <div class="window" id="window-calendar" style="width: 420px; height: 470px;">
+            <div class="window-header" id="window-calendar-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-calendar')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-calendar')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-calendar')"></div>
+                </div>
+                <div class="window-title">Calendar</div>
+            </div>
+            <div class="calendar-app">
+                <div class="calendar-top">
+                    <button onclick="changeCalendarMonth(-1)">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <h2 id="calendar-month-year">Month Year</h2>
+                    <button onclick="changeCalendarMonth(1)">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="calendar-weekdays">
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                    <div>Sun</div>
+                </div>
+
+                <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+        </div>
+
         <!-- Window | MusicPlayer -->
         <div class="window" id="window-music" style="background-color: #33333383; width: 500px; height: 600px;">
             <div class="window-header" id="window-music-header">
@@ -563,6 +602,9 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="dock-icon" onclick="toggleWindowFromDock('window-paint', 'Paint')" style="background: #22c55e; color: white;">
                 <i class="fa-solid fa-paintbrush"></i>
+            </div>
+            <div class="dock-icon" onclick="toggleWindowFromDock('window-calendar', 'Calendar')" style="background: #ef4444; color: white;">
+                <i class="fa-regular fa-calendar"></i>
             </div>
 
             <div class="dock-separator"></div>
@@ -868,13 +910,13 @@ I hope you like this WebOS! Byee!
         function updateClock() {
             const now = new Date();
 
-            const timeString = now.toLocaleTimeString('it-IT', {
+            const timeString = now.toLocaleTimeString('en-EN', {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false
             });
 
-            const dateString = now.toLocaleDateString('it-IT', {
+            const dateString = now.toLocaleDateString('en-EN', {
                 weekday: 'long',
                 day: 'numeric',
                 month: 'long',
