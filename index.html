@@ -820,6 +820,66 @@ I hope you like this WebOS! Byee!
         updateStopwatchDisplay();
         resetTimer();
 
+        // Script | Calendar
+        let calendarDate = new Date();
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            const monthYear = document.getElementById('calendar-month-year');
+            if (!grid || !monthYear) return;
+
+            grid.innerHTML = '';
+
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            let startDay = firstDay.getDay();
+            startDay = startDay === 0 ? 6 : startDay - 1; // monday = 0
+
+            const totalDays = lastDay.getDate();
+
+            const monthName = calendarDate.toLocaleDateString('en-EN', {
+                month: 'long',
+                year: 'numeric'
+            });
+
+            monthYear.innerText = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+            for (let i = 0; i < startDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day empty';
+                grid.appendChild(empty);
+            }
+
+            const today = new Date();
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.innerText = day;
+
+                if (
+                    day === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()
+                ) {
+                    dayEl.classList.add('today');
+                }
+
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function changeCalendarMonth(direction) {
+            calendarDate.setMonth(calendarDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        renderCalendar();
+
         // Script | Paint
         const paintCanvas = document.getElementById('paint-canvas');
         const paintCtx = paintCanvas.getContext('2d');
@@ -1131,6 +1191,7 @@ I hope you like this WebOS! Byee!
             'window-minecraft': { name: 'Minecraft', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-slither': { name: 'Slither.io', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' },
+            'window-calendar': { name: 'Calendar', icon: 'fa-calendar', color: '#ffffff' },
             'window-paint': { name: 'Paint', icon: 'fa-paintbrush', color: '#22c55e' }
         };
 
@@ -1172,6 +1233,7 @@ I hope you like this WebOS! Byee!
             'window-slither',
             'window-games',
             'window-clock',
+            'window-calendar',
             'window-paint'
         ];
         

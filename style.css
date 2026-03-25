@@ -825,6 +825,7 @@
             height: calc(100% - 45px);
             display: flex;
             flex-direction: column;
+            background: rgba(0,0,0,0.5);
         }
 
         .calendar-top {
@@ -848,6 +849,49 @@
             border-radius: 10px;
             cursor: pointer;
             transition: 0.2s;
+        }
+
+        .calendar-top button:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            flex: 1;
+        }
+
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+        }
+
+        .calendar-day.today {
+            background: #3b82f6;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(59,130,246,0.35);
         }
 
         .paint-app {
