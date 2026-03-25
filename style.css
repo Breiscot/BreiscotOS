@@ -342,6 +342,9 @@
 
         .window-header {
             height: 45px;
+            min-height: 45px;
+            max-height: 45px;
+            flex-shrink: 0;
             background: rgba(0,0,0,0.5);
             border-bottom: 1px solid var(--glass-border);
             display: flex;
@@ -652,14 +655,17 @@
         }
 
         .terminal-content {
-            flex-grow: 1;
+            flex: 1;
+            min-height: 0;
             padding: 10px 15px;
             color: #4af626;
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             overflow-y: auto;
             cursor: text;
+            display: flex;
             background: rgba(0,0,0,0.5);
+            flex-direction: column;
         }
 
         .terminal-content::-webkit-scrollbar {
