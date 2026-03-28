@@ -929,6 +929,29 @@ I hope you like this WebOS! Byee!
             }
         }, 100);
 
+        // Script | Calculator
+        const calcDisplay = document.getElementById('calculator-display');
+
+        function appendCalc(value) {
+            calcDisplay.value += value;
+        }
+
+        function clearCalc() {
+            calcDisplay.value = '';
+        }
+
+        function deleteCalc() {
+            calcDisplay.value = calcDisplay.value.slice(0, -1);
+        }
+
+        function calculateResult() {
+            try {
+                calcDisplay.value = eval(calcDisplay.value);
+            } catch {
+                calcDisplay.value = 'Error';
+            }
+        }
+
         // Script | Calendar
         let calendarDate = new Date();
 
@@ -1302,6 +1325,7 @@ I hope you like this WebOS! Byee!
             'window-slither': { name: 'Slither.io', icon: 'fa-gamepad', color: '#4da6ff' },
             'window-clock': { name: 'Clock', icon: 'fa-clock', color: '#ffffff' },
             'window-calendar': { name: 'Calendar', icon: 'fa-calendar', color: '#ffffff' },
+            'window-calculator': { name: 'Calculator', icon: 'fa-calculator', color: '#ffffff' },
             'window-paint': { name: 'Paint', icon: 'fa-paintbrush', color: '#22c55e' }
         };
 
@@ -1345,6 +1369,7 @@ I hope you like this WebOS! Byee!
             'window-games',
             'window-clock',
             'window-calendar',
+            'window-calculator',
             'window-paint'
         ];
         
