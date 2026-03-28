@@ -854,6 +854,30 @@ I hope you like this WebOS! Byee!
         updateStopwatchDisplay();
         resetTimer();
 
+        // Script | Writer
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            document.getElementById('writer-editor').focus();
+        }
+
+        function saveWriterContent() {
+            const content = document.getElementById('writer-editor').innerHTML;
+            localStorage.setItem('breiscot_writer_content', content);
+        }
+
+        function loadWriterContent() {
+            const saved = localStorage.getItem('breiscot_writer_content');
+            if (saved) {
+                document.getElementById('writer-editor').innerHTML = saved;
+            }
+        }
+
+        setTimeout(() => {
+            if (document.getElementById('writer-editor')) {
+                loadWriterContent();
+            }
+        }, 100);
+
         // Script | Calendar
         let calendarDate = new Date();
 
