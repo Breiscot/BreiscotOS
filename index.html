@@ -90,35 +90,42 @@ In this README I can give you instructions on:
 • Terminal commands you can use.
 • How to use the Browser with available URL.
 • Games folder.
-• Dock features
+• Dock features.
+• Writer Saving System.
 
 1. Terminal Commands you can use:
-   You can use in the terminal the commands below:
+    You can use in the terminal the commands below:
 
     clear               |   To clear the terminal
     neofetch            |   To view system information
     curl parrot.live    |   To start the parrot ASCII animation
 
 2. How to use the Browser with available URL:
-   When you open your browser, you'll see the default site https://www.wikipedia.org.
-   You can use it to search Wikipedia, but if you want to use other sites, make sure they don't have Clickjacking protection,
-   HTML sites can't open web links with this protection.
-   So, here are the sites I've found that don't have this protection:
+    When you open your browser, you'll see the default site https://www.wikipedia.org.
+    You can use it to search Wikipedia, but if you want to use other sites, make sure they don't have Clickjacking protection,
+    HTML sites can't open web links with this protection.
+    So, here are the sites I've found that don't have this protection:
 
-   https://www.wikipedia.org | What you'll see by default in the browser
-   https://archive.org       | This is Internet Archive, you can open it
+    https://www.wikipedia.org | What you'll see by default in the browser
+    https://archive.org       | This is Internet Archive, you can open it
 
 3. Games folder:
-   I added a folder inside the main folder, namely the Games,
-   inside you can find some games, in this folder you can find:
+    I added a folder inside the main folder, namely the Games,
+    inside you can find some games, in this folder you can find:
 
-   MineAndSurvive       |   A mining and survival game, yes the title says all (is created by me)
-   Minecraft            |   Is Minecraft (not the original obviously)
-   Slither.io           |   Is Slither.io for web but I added this in Games folder
+    MineAndSurvive       |   A mining and survival game, yes the title says all (is created by me)
+    Minecraft            |   Is Minecraft (not the original obviously)
+    Slither.io           |   Is Slither.io for web but I added this in Games folder
 
 4. Dock features:
-   The Dock has some features you can see, such as icons popping up when you hover your cursor over icons in the Dock.
-   If you make a window full-screen, you can see the Dock disappear, but if you hover your cursor down, you can see it reappear.
+    The Dock has some features you can see, such as icons popping up when you hover your cursor over icons in the Dock.
+    If you make a window full-screen, you can see the Dock disappear, but if you hover your cursor down, you can see it reappear.
+
+5. Writer Saving System:
+    In the Writer application, you can save your text within the BreiscotOS itself,
+    just click the Save button with the floppy disk icon inside the app,
+    it will not say anything about the fact that it is saved,
+    once clicked when you reload the site page you will always be able to review it from that save point.
 
 I hope you like this WebOS! Byee!
             </textarea>
@@ -150,6 +157,47 @@ I hope you like this WebOS! Byee!
                 </div>
             </div>
         </div>
+
+        <!-- Window | Calculator -->
+         <div class="window" id="window-calculator" style="width: 340px; height: 520px;">
+            <div class="window-header" id="window-calculator-header">
+                <div class="window-controls">
+                    <div class="control-btn btn-close" onclick="closeWindow('window-calculator')"></div>
+                    <div class="control-btn btn-min" onclick="minimizeWindow('window-calculator')"></div>
+                    <div class="control-btn btn-max" onclick="maximizeWindow('window-calculator')"></div>
+                </div>
+                <div class="window-title">Calculator</div>
+            </div>
+            <div class="calculator-app">
+                <input type="text" id="calculator-display" class="calculator-display" readonly>
+
+                <div class="calculator-grid">
+                    <button onclick="clearCalc()">C</button>
+                    <button onclick="deleteCalc()">⌫</button>
+                    <button onclick="appendCalc('%')">%</button>
+                    <button onclick="appendCalc('/')">÷</button>
+
+                    <button onclick="appendCalc('7')">7</button>
+                    <button onclick="appendCalc('8')">8</button>
+                    <button onclick="appendCalc('9')">9</button>
+                    <button onclick="appendCalc('*')">x</button>
+
+                    <button onclick="appendCalc('4')">4</button>
+                    <button onclick="appendCalc('5')">5</button>
+                    <button onclick="appendCalc('6')">6</button>
+                    <button onclick="appendCalc('-')">-</button>
+
+                    <button onclick="appendCalc('1')">1</button>
+                    <button onclick="appendCalc('2')">2</button>
+                    <button onclick="appendCalc('3')">3</button>
+                    <button onclick="appendCalc('+')">+</button>
+
+                    <button onclick="appendCalc('0')" class="calc-zero">0</button>
+                    <button onclick="appendCalc('.')">.</button>
+                    <button onclick="calculateResult()" class="calc-equals">=</button>
+                </div>
+            </div>
+         </div>
 
         <!-- Window | Ceiling Photo -->
         <div class="window" id="window-photo">
@@ -639,6 +687,9 @@ I hope you like this WebOS! Byee!
             </div>
             <div class="dock-icon" onclick="toggleWindowFromDock('window-writer', 'Writer')" style="background: #3b82f6; color: white;">
                 <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <div class="dock-icon" onclick="toggleWindowFromDock('window-calculator', 'Calculator')" style="background: #f59e0b; color: white;">
+                <i class="fa-solid fa-calculator"></i>
             </div>
 
             <div class="dock-separator"></div>
@@ -1234,6 +1285,7 @@ I hope you like this WebOS! Byee!
         // Script | appRegistry List
         const appRegistry = {
             'window-notepad': { name: 'NotePad', icon: 'fa-file-lines', color: '#ffffff' },
+            'window-writer': { name: 'Writer', icon: 'fa-file-lines', color: '#ffffff' },
             'window-photo': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
             'window-black-hole-image': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
             'window-elden-ring-image': { name: 'Image', icon: 'fa-image', color: '#f5576c' },
@@ -1279,6 +1331,7 @@ I hope you like this WebOS! Byee!
             'window-settings',
             'window-terminal',
             'window-notepad',
+            'window-writer',
             'window-photo',
             'window-black-hole-image',
             'window-elden-ring-image',
