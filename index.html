@@ -9,6 +9,15 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
+    <!-- Full-Screen BreiscotOS -->
+    <div id="startup-overlay">
+        <div class="startup-box">
+            <h1>BreiscotOS</h1>
+            <p>Press to start in full-screen</p>
+            <button onclick="startBreiscotOS()">Start</button>
+        </div>
+    </div>
+
     <audio id="my-audio"></audio>
     <!-- Lockscreen -->
     <div id="lockscreen">
@@ -92,6 +101,7 @@ In this README I can give you instructions on:
 • Games folder.
 • Dock features.
 • Writer Saving System.
+• Calculator keys.
 
 1. Terminal Commands you can use:
     You can use in the terminal the commands below:
@@ -126,6 +136,16 @@ In this README I can give you instructions on:
     just click the Save button with the floppy disk icon inside the app,
     it will not say anything about the fact that it is saved,
     once clicked when you reload the site page you will always be able to review it from that save point.
+
+6. Calculator keys:
+    In the Calculator application, Instead of typing directly by pressing on the grid,
+    you can quickly type the numbers you want to calculate directly on the keyboard.
+    You can do this with the respective keys:
+
+    To do Basics operations         |   Type '+', '-', '*', '/', '.', '%'
+    To Calculate the numbers        |   Type 'Enter' or '='
+    To Clear the Calculator         |   Type 'Escape' or 'Delete'
+    To Delete last Character        |   Type 'Backspace'
 
 I hope you like this WebOS! Byee!
             </textarea>
@@ -699,6 +719,22 @@ I hope you like this WebOS! Byee!
 
     <!-- JavaScript -->
     <script>
+        // Script | startBreiscotOS
+        function startBreiscotOS() {
+            const el = document.documentElement;
+
+            if (el.requestFullscreen) {
+                el.requestFullscreen().catch(() => {});
+            } else if (el.webkitRequestFullScreen) {
+                el.webkitRequestFullScreen();
+            } else if (el.msRequestFullScreen) {
+                el.msRequestFullScreen();
+            }
+
+            document.getElementById('startup-overlay').style.display = 'none';
+        }
+
+
         // Script | Dock
         function hasMaximizedWindow() {
             return Array.from(document.querySelectorAll('.window')).some(win =>
@@ -951,6 +987,68 @@ I hope you like this WebOS! Byee!
                 calcDisplay.value = 'Error';
             }
         }
+
+        document.addEventListener('keydown', (e) => {
+            const desktop = document.getElementById('desktop');
+            const calcWindow = document.getElementById('window-calculator');
+
+            if (!desktop.classList.contains('active')) return;
+
+            if (!calcWindow || calcWindow.style.display === 'none') return;
+
+            const activeEl = document.activeElement;
+            if (
+                activeEl &&
+                (
+                    activeEl.tagName === 'INPUT' ||
+                    activeEl.tagName === 'TEXTAREA' ||
+                    activeEl.isContentEditable
+                )
+            ) {
+                return;
+            }
+
+            const topZ = Math.max(...Array.from(document.querySelectorAll('.window')).map(w => parseInt(w.style.zIndex) || 0));
+            const calcZ = parseInt(calcWindow.style.zIndex) || 0;
+
+            if (calcZ < topZ) return;
+
+            const key = e.key;
+
+            if (/^[0-9]$/.test(key)) {
+                appendCalc(key)
+                e.preventDefault();
+                return;
+            }
+
+            // basics operations
+            if (['+', '-', '*', '/', '.', '%'].includes(key)) {
+                appendCalc(key);
+                e.preventDefault();
+                return;
+            }
+
+            // calculate
+            if (key === 'Enter' || key === '=' || e.code === 'NumpadEnter') {
+                calculateResult();
+                e.preventDefault();
+                return;
+            }
+
+            // delete last character
+            if (key === 'Backspace') {
+                deleteCalc();
+                e.preventDefault();
+                return;
+            }
+
+            // clear all
+            if (key === 'Escape' || key === 'Delete') {
+                clearCalc();
+                e.preventDefault();
+                return;
+            }
+        })
 
         // Script | Calendar
         let calendarDate = new Date();
